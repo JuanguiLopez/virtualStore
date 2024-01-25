@@ -65,10 +65,9 @@ class ProductsManager {
       !price ||
       //!status ||
       !stock ||
-      !category ||
-      !thumbnails
+      !category
     ) {
-      return console.log("Todos los valores son obligatorios.");
+      return console.log("Todos los campos menos thumbnails son obligatorios.");
     }
 
     if (this.products.some((product) => product.code === code)) {
