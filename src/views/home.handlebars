@@ -1,0 +1,29 @@
+<h1>Bienvenidos a su tienda favorita</h1>
+
+<h3>Productos disponibles</h3>
+<table>
+  <tr>
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Descripción</th>
+    <th>Precio</th>
+    <th>Stock</th>
+    <th>Categoria</th>
+    <th>thumbnails</th>
+  </tr>
+  {{#each products}}
+    <tr>
+      <td style="text-align: center;">{{this.id}}</td>
+      <td>{{this.title}}</td>
+      <td>{{this.description}}</td>
+      <td style="text-align: center;">{{this.price}}</td>
+      <td style="text-align: center;">{{this.stock}}</td>
+      <td style="text-align: center;">{{this.category}}</td>
+      <td>{{this.thumbnails}}</td>
+    </tr>
+  {{/each}}
+</table>
+
+<!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
