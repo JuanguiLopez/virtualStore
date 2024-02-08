@@ -1,55 +1,65 @@
-<h1 style="padding-left: 20px;">Real time products</h1>
-
-<div id="messages"></div>
+<h1 style="padding-left: 20px;">Gestionar productos</h1>
 
 <main class="main" style="padding-left: 20px;">
 
-  <form id="formAddProduct" action="/api/products" method="POST">
-    <h2>Formulario de Creacion de Producto</h2>
-    <label for="title">Título</label>
-    <input type="text" name="title" placeholder="Título" value="" />
-    <label for="description">Descripción</label>
-    <input type="text" name="description" placeholder="Descripción" value="" />
-    <label for="code">Código</label>
-    <input type="text" name="code" placeholder="Código" value="" />
-    <br />
-    <br />
-    <label for="stock">Stock</label>
-    <input type="number" name="stock" placeholder="Stock" value="" />
-    <label for="stock">Precio</label>
-    <input type="number" name="price" placeholder="Precio" value="" />
-    <label for="category">Categoria</label>
-    <input type="text" name="category" placeholder="Categoria" value="" />
-    <br />
-    <br />
-    <label for="thumbnails">Thumbnails</label>
-    <input type="file" name="thumbnails" placeholder="Thumbnails" multiple />
-    <br />
-    <br />
-    <button id="btnAgregar" >Crear Producto</button>
-  </form>
+  <h2>Creación de producto</h2>
+  <div>
+    <label>Título</label>
+    <input id="iptTitulo" type="text" placeholder="Título" />
+    <label>Descripción</label>
+    <input id="iptDescripcion" type="text" placeholder="Descripción" />
+    <label>Código</label>
+    <input id="iptCodigo" type="text" placeholder="Código" />
+  </div>
+  <br />
+  <div>
+    <label>Stock</label>
+    <input id="iptStock" type="number" placeholder="Stock" />
+    <label>Precio</label>
+    <input id="iptPrecio" type="number" placeholder="Precio" />
+    <label>Categoria</label>
+    <input id="iptCategoria" type="text" placeholder="Categoria" />
+  </div>
+  <br />
+  <div>
+    <label>Thumbnails</label>
+    <input id="fiThumbnails" type="file" placeholder="Thumbnails" multiple />
+  </div>
+  <br />
+  <button id="btnAgregar">Crear Producto</button>
+
+  <br />
   <br />
 
-  <h2 class="titulo">Productos Disponibles en tiempo real</h2>
+  <h2>Productos disponibles</h2>
 
-  <table id="realTimeTable">
-    <tr>
-      <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Precio</th>
-      <th>Stock</th>
-      <th>Acciones</th>
-    </tr>
-    {{#each products}}
+  <table>
+    <thead>
       <tr>
-        <td>{{this.title}}</td>
-        <td>{{this.description}}</td>
-        <td>${{this.price}}</td>
-        <td>{{this.stock}}</td>
-        <td>
-          <button data-id="btnEliminar" id="{{this.id}}">Eliminar</button>
+        <th>id</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Categoria</th>
+        <th>Acciones</th>
       </tr>
-    {{/each}}
+    </thead>
+    <tbody id="realTimeTable">
+      {{#each products}}
+        <tr>
+          <td>{{this.id}}</td>
+          <td>{{this.title}}</td>
+          <td>{{this.description}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.stock}}</td>
+          <td>{{this.category}}</td>
+          <td>
+            <button onclick="eliminarProducto({{this.id}})">Eliminar</button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
   </table>
   <br />
   <br />
