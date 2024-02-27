@@ -14,8 +14,20 @@ const btnEliminar = document.getElementById("btnEliminar");
 
 //socket.emit("message", "Hello server, sending message from a websocket");
 
-btnAgregar.addEventListener("click", () => {
-  socket.emit("crear producto", {
+let newProductForm = document.getElementById("newProductForm");
+newProductForm.addEventListener("submit", AgregarProducto);
+
+//btnAgregar.addEventListener("click", () => {
+function AgregarProducto(e) {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const infoProd = Object.fromEntries(formData.entries());
+  //console.log("info form:", infoProd);
+  socket.emit("crear producto", infoProd);
+
+  e.target.reset(); // Para limpiar el formulario
+
+  /*socket.emit("crear producto", {
     title: iptTitulo.value,
     description: iptDescripcion.value,
     code: iptCodigo.value,
@@ -32,7 +44,8 @@ btnAgregar.addEventListener("click", () => {
   iptStock.value = "";
   iptCategoria.value = "";
   //fiThumbnails.value = "";
-});
+  */
+} //);
 
 // Eventos server
 socket.on("actualizar lista", ({ products }) => {
@@ -40,13 +53,13 @@ socket.on("actualizar lista", ({ products }) => {
   products.forEach((prod) => {
     realTimeTable.innerHTML += `
       <tr>
-        <td>${prod.id}</td>
+        <td>${prod._id}</td>
         <td>${prod.title}</td>
         <td>${prod.description}</td>
         <td>${prod.price}</td>
         <td>${prod.stock}</td>
         <td>${prod.category}</td>
-        <td><button onclick="eliminarProducto(${prod.id})">Eliminar</button></td>
+        <td><button onclick="eliminarProducto('${prod._id}')">Eliminar</button></td>
       </tr>`;
   });
 });

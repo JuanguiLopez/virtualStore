@@ -1,15 +1,27 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
 const { Server } = require("socket.io");
-const ProductManager = require("./ProductManager");
+//const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
+const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
+const messageModel = require("./dao/models/message");
+const mongoose = require("mongoose");
+
+const port = 8080;
 
 const productsRouter = require("./routes/products.router");
 const cartsRouter = require("./routes/carts.router");
 const viewsRouter = require("./routes/views.router");
 
-const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json");
+//const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
+const prodManager = new ProductManager(); // MongoDB Manager
 
-const port = 8080;
+mongoose
+  .connect(
+    `mongodb+srv://juanguilopezh:d9XI13lSGDhdNmth@coderhcluster.xwnfwp2.mongodb.net/ecommerce`
+  )
+  .then(() => {
+    console.log("connected to atlas.");
+  });
 
 const app = express();
 
@@ -44,7 +56,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("crear producto", async (newProduct) => {
-    console.log(newProduct);
+    //console.log("prod:", newProduct);
     await prodManager.addProduct(newProduct);
     const products = await prodManager.getProducts();
 
@@ -56,5 +68,19 @@ io.on("connection", (socket) => {
     const products = await prodManager.getProducts();
 
     io.emit("actualizar lista", { products });
+  });
+
+  /** CHAT */
+  socket.on("new message", async (messageInfo) => {
+    await messageModel.create(messageInfo);
+    const messages = await messageModel.find().lean();
+    io.emit("chat messages", { messages });
+  });
+
+  socket.on("authenticated", async ({ myUserName }) => {
+    const messages = await messageModel.find().lean();
+    socket.emit("chat messages", { messages });
+
+    socket.broadcast.emit("newUser", { newUserName: myUserName });
   });
 });

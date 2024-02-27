@@ -61,7 +61,7 @@ class CartsManager {
     const cart = carts.find((cart) => cart.id == idCart);
     console.log("cart:", cart);
     if (!cart) {
-      console.log("Not found");
+      console.log("Cart not found");
       return;
     }
 

@@ -1,9 +1,11 @@
 const { Router } = require("express");
-const ProductManager = require("../ProductManager");
+//const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
+const ProductManager = require("../dao/dbManagers/ProductManager"); // MongoDB Manager
 
 const router = Router();
 
-const prodManager = new ProductManager(__dirname + "/../files/ProductsJG.json");
+//const prodManager = new ProductManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
+const prodManager = new ProductManager(); // MongoDB Manager
 
 router.get("/", async (req, res) => {
   let resultado = await prodManager.getProducts();

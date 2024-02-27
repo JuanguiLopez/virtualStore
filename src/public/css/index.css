@@ -6,3 +6,8 @@ th {
 table {
   border-collapse: collapse;
 }
+
+#userNameTitle {
+  font-size: larger;
+  font-weight: 700;
+}

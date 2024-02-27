@@ -1,11 +1,15 @@
 const { Router } = require("express");
-const CartsManager = require("../CartsManager");
-const ProductsManager = require("../ProductManager");
+// FILE Manager
+//const CartsManager = require("../dao/fileManagers/CartsManager");
+//const ProductsManager = require("../dao/fileManagers/ProductManager");
+// MongoDB Manager
+const CartsManager = require("../dao/dbManagers/CartsManager");
+const ProductsManager = require("../dao/dbManagers/ProductManager");
 
-const cartManager = new CartsManager(__dirname + "/../files/cartsJG.json");
-const prodManager = new ProductsManager(
-  __dirname + "/../files/ProductsJG.json"
-);
+//const cartManager = new CartsManager(__dirname + "/../files/cartsJG.json"); // FILE Manager
+//const prodManager = new ProductsManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
+const prodManager = new ProductsManager(); // MongoDB Manager
+const cartManager = new CartsManager(); // MongoDB Manager
 
 const router = Router();
 

@@ -21,7 +21,7 @@ class ProductsManager {
           0
         ) + 1;
     } catch (error) {
-      console.log("Error al cargar productos al inicio");
+      //console.log("Error al cargar productos al inicio");
       this.products = [];
     }
   }
@@ -98,10 +98,10 @@ class ProductsManager {
 
   async getProductById(idProduct) {
     const products = await this.getProducts();
-    const product = products.find((prod) => prod.id === idProduct);
+    const product = products.find((prod) => prod.id == idProduct);
 
     if (!product) {
-      console.log("Not found");
+      console.log("Product not found");
       return;
     }
 

@@ -3,32 +3,48 @@
 <main class="main" style="padding-left: 20px;">
 
   <h2>Creación de producto</h2>
-  <div>
-    <label>Título</label>
-    <input id="iptTitulo" type="text" placeholder="Título" />
-    <label>Descripción</label>
-    <input id="iptDescripcion" type="text" placeholder="Descripción" />
-    <label>Código</label>
-    <input id="iptCodigo" type="text" placeholder="Código" />
-  </div>
-  <br />
-  <div>
-    <label>Stock</label>
-    <input id="iptStock" type="number" placeholder="Stock" />
-    <label>Precio</label>
-    <input id="iptPrecio" type="number" placeholder="Precio" />
-    <label>Categoria</label>
-    <input id="iptCategoria" type="text" placeholder="Categoria" />
-  </div>
-  <br />
-  <div>
-    <label>Thumbnails</label>
-    <input id="fiThumbnails" type="file" placeholder="Thumbnails" multiple />
-  </div>
-  <br />
-  <button id="btnAgregar">Crear Producto</button>
-
-  <br />
+  <form id="newProductForm">
+    <div>
+      <label>Título</label>
+      <input id="iptTitulo" name="title" type="text" placeholder="Título" />
+      <label>Descripción</label>
+      <input
+        id="iptDescripcion"
+        name="description"
+        type="text"
+        placeholder="Descripción"
+      />
+      <label>Código</label>
+      <input id="iptCodigo" name="code" type="text" placeholder="Código" />
+    </div>
+    <br />
+    <div>
+      <label>Stock</label>
+      <input id="iptStock" name="stock" type="number" placeholder="Stock" />
+      <label>Precio</label>
+      <input id="iptPrecio" name="price" type="number" placeholder="Precio" />
+      <label>Categoria</label>
+      <input
+        id="iptCategoria"
+        name="category"
+        type="text"
+        placeholder="Categoria"
+      />
+    </div>
+    <br />
+    <div>
+      <label>Thumbnails</label>
+      <input
+        id="fiThumbnails"
+        name="thumbnails"
+        type="file"
+        placeholder="Thumbnails"
+        multiple
+      />
+    </div>
+    <br />
+    <button id="btnAgregar">Crear Producto</button>
+  </form>
   <br />
 
   <h2>Productos disponibles</h2>
@@ -48,14 +64,14 @@
     <tbody id="realTimeTable">
       {{#each products}}
         <tr>
-          <td>{{this.id}}</td>
+          <td>{{this._id}}</td>
           <td>{{this.title}}</td>
           <td>{{this.description}}</td>
           <td>{{this.price}}</td>
           <td>{{this.stock}}</td>
           <td>{{this.category}}</td>
           <td>
-            <button onclick="eliminarProducto({{this.id}})">Eliminar</button>
+            <button onclick="eliminarProducto('{{this._id}}')">Eliminar</button>
           </td>
         </tr>
       {{/each}}
@@ -65,5 +81,6 @@
   <br />
 </main>
 
+<!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>
