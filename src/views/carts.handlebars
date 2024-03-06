@@ -1,0 +1,21 @@
+<main style="padding-left: 20px;">
+  <h2>Tu carrito de compras</h2>
+
+  {{#each products}}
+    <div
+      style="border: 1px black solid;width: 500px;padding: 0px 10px 0px 10px;"
+    >
+      <h3 style="text-align: center;">{{this.product.title}}</h3>
+      <p>Descripción: {{this.product.description}}</p>
+      <p>Código: {{this.product.code}}</p>
+      <p>Precio: ${{this.product.price}}</p>
+      <p>Stock: {{this.product.stock}}</p>
+      <p>Categoria: {{this.product.category}}</p>
+      <p>Cantidad: {{this.quantity}}</p>
+    </div>
+    <br />
+  {{/each}}
+</main>
+<!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

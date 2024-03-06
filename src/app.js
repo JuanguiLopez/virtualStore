@@ -56,18 +56,19 @@ io.on("connection", (socket) => {
   });
 
   socket.on("crear producto", async (newProduct) => {
-    //console.log("prod:", newProduct);
     await prodManager.addProduct(newProduct);
-    const products = await prodManager.getProducts();
+    const products = await prodManager.getProducts(1, 10, "asc", "");
+    const productos = products.docs;
 
-    io.emit("actualizar lista", { products });
+    io.emit("actualizar lista", { productos });
   });
 
   socket.on("eliminar producto", async ({ id }) => {
     await prodManager.deleteProduct(id);
-    const products = await prodManager.getProducts();
+    const products = await prodManager.getProducts(1, 10, "asc", "");
+    const productos = products.docs;
 
-    io.emit("actualizar lista", { products });
+    io.emit("actualizar lista", { productos });
   });
 
   /** CHAT */

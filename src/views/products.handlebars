@@ -1,8 +1,6 @@
-<h1 style="padding-left: 20px;">Bienvenidos a su tienda favorita</h1>
-
-<h3 style="padding-left: 20px;">Productos disponibles</h3>
-
 <main style="padding-left: 20px;">
+  <h3>Productos disponibles</h3>
+
   <table>
     <thead>
       <tr>
@@ -12,11 +10,11 @@
         <th>Precio</th>
         <th>Stock</th>
         <th>Categoria</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody id="realTimeTable">
       {{#each productos}}
-        <script>console.log(productos)</script>
         <tr>
           <td>{{this._id}}</td>
           <td>{{this.title}}</td>
@@ -24,10 +22,24 @@
           <td>${{this.price}}</td>
           <td>{{this.stock}}</td>
           <td>{{this.category}}</td>
+          <td>
+            <button>Agregar al carrito</button>
+          </td>
         </tr>
       {{/each}}
     </tbody>
   </table>
+
+  <br />
+
+  {{#if hasPrevPage}}
+    <a href="{{prevLink}}">anterior</a>
+  {{/if}}
+
+  {{#if hasNextPage}}
+    <a href="{{nextLink}}">Siguiente</a>
+  {{/if}}
+
 </main>
 
 <!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->

@@ -48,9 +48,9 @@ function AgregarProducto(e) {
 } //);
 
 // Eventos server
-socket.on("actualizar lista", ({ products }) => {
+socket.on("actualizar lista", ({ productos }) => {
   realTimeTable.innerHTML = "";
-  products.forEach((prod) => {
+  productos.forEach((prod) => {
     realTimeTable.innerHTML += `
       <tr>
         <td>${prod._id}</td>
