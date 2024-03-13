@@ -1,10 +1,15 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
 const { Server } = require("socket.io");
+const mongoose = require("mongoose");
+const mongoStore = require("connect-mongo");
+const session = require("express-session");
+const sessionRouter = require("./routes/sessions.router");
+require("dotenv").config();
+
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
 const messageModel = require("./dao/models/message");
-const mongoose = require("mongoose");
 
 const port = 8080;
 
@@ -15,15 +20,29 @@ const viewsRouter = require("./routes/views.router");
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
 const prodManager = new ProductManager(); // MongoDB Manager
 
+const app = express();
+
+/** database connection */
 mongoose
   .connect(
-    `mongodb+srv://juanguilopezh:d9XI13lSGDhdNmth@coderhcluster.xwnfwp2.mongodb.net/ecommerce`
+    `mongodb+srv://juanguilopezh:${process.env.MONGO_PASSWORD}@coderhcluster.xwnfwp2.mongodb.net/ecommerce`
   )
   .then(() => {
     console.log("connected to atlas.");
   });
 
-const app = express();
+/** sessions settings (middleware) */
+app.use(
+  session({
+    secret: "ourNewSecretJG",
+    resave: false,
+    saveUninitialized: false,
+    store: mongoStore.create({
+      mongoUrl: `mongodb+srv://juanguilopezh:${process.env.MONGO_PASSWORD}@coderhcluster.xwnfwp2.mongodb.net/ecommerce`,
+      ttl: 3600,
+    }),
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,6 +58,7 @@ app.set("view engine", "handlebars");
 // asigna endpoints a routers
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/api/sessions", sessionRouter);
 app.use("/", viewsRouter);
 
 //-----------------------

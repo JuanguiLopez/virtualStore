@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
       : null,
   };
 
-  res.send({ pageData });
+  res.send({ resultado: "success", pageData });
 });
 
 router.get("/:pid", async (req, res) => {

@@ -9,16 +9,30 @@ const cartManager = new CartsManager();
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+/** middlewares */
+const validatePublicAccess = (req, res, next) => {
+  if (req.session.user) return res.redirect("/");
+
+  next();
+};
+
+const validatePrivateAccess = (req, res, next) => {
+  if (!req.session.user) return res.redirect("/login");
+
+  next();
+};
+
+/** routes */
+router.get("/", validatePrivateAccess, async (req, res) => {
   const { page, limit, sort, query } = req.query;
   let products = await prodManager.getProducts(page, limit, sort, query);
   const productos = products.docs;
-  console.log(productos);
+  //console.log(productos);
 
-  res.render("home", { productos });
+  res.render("home", { productos, user: req.session.user });
 });
 
-router.get("/realtimeproducts", async (req, res) => {
+router.get("/realtimeproducts", validatePrivateAccess, async (req, res) => {
   const { page, limit, sort, query } = req.query;
   let products = await prodManager.getProducts(page, limit, sort, query);
   const productos = products.docs;
@@ -26,7 +40,7 @@ router.get("/realtimeproducts", async (req, res) => {
   res.render("realTimeProducts", { productos });
 });
 
-router.get("/products", async (req, res) => {
+router.get("/products", validatePrivateAccess, async (req, res) => {
   const { page, limit, sort, query } = req.query;
 
   let products = await prodManager.getProducts(page, limit, sort, query);
@@ -39,7 +53,7 @@ router.get("/products", async (req, res) => {
   res.render("products", { productos, ...rest, prevLink, nextLink });
 });
 
-router.get("/carts/:cid", async (req, res) => {
+router.get("/carts/:cid", validatePrivateAccess, async (req, res) => {
   const cartId = req.params.cid;
   const cart = await cartManager.getCartById(cartId);
 
@@ -48,8 +62,22 @@ router.get("/carts/:cid", async (req, res) => {
   res.render("carts", { products });
 });
 
-router.get("/chat", (req, res) => {
+/** chat */
+router.get("/chat", validatePublicAccess, (req, res) => {
   res.render("chat", {});
+});
+
+/** register, login y reset password */
+router.get("/register", validatePublicAccess, (req, res) => {
+  res.render("register", {});
+});
+
+router.get("/login", validatePublicAccess, (req, res) => {
+  res.render("login", {});
+});
+
+router.get("/resetPassword", validatePublicAccess, (req, res) => {
+  res.render("resetPassword", {});
 });
 
 module.exports = router;
