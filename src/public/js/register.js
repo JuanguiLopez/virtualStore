@@ -18,5 +18,8 @@ registerForm.addEventListener("submit", (e) => {
     .then((res) => res.json())
     .then((data) => {
       console.log("Data", data);
+      setTimeout(() => {
+        window.location.href = "/login"; // <- redirección desde el front
+      }, 2000);
     });
 });

@@ -22,7 +22,7 @@ sessionRouter.post("/register", async (req, res) => {
     role: "usuario",
   });
 
-  res.send({ status: "success", message: "user registered", details, result });
+  res.send({ status: "success", message: "user registered", details: result });
 });
 
 sessionRouter.post("/login", async (req, res) => {
