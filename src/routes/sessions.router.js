@@ -1,11 +1,17 @@
 const { Router } = require("express");
 const userModel = require("../dao/models/user");
 const { createHash, isValidPassword } = require("../utils");
+const passport = require("passport");
 
 const sessionRouter = Router();
 
-sessionRouter.post("/register", async (req, res) => {
-  const { first_name, last_name, age, email, password } = req.body;
+sessionRouter.post(
+  "/register",
+  passport.authenticate("register", {
+    failureRedirect: "/api/sessions/registerFail",
+  }),
+  async (req, res) => {
+    /*const { first_name, last_name, age, email, password } = req.body;
 
   if (!first_name || !last_name || !age || !email || !password) {
     return res.status(400).send({ status: "error", error: "missing data" });
@@ -21,52 +27,97 @@ sessionRouter.post("/register", async (req, res) => {
     password: hashedPassword,
     role: "usuario",
   });
+*/
+    res.send({ status: "success", message: "user registered" }); //, details: result });
+  }
+);
 
-  res.send({ status: "success", message: "user registered", details: result });
+sessionRouter.get("/registerFail", (req, res) => {
+  res.status(401).send({ status: "error", error: "authentication error" });
 });
 
-sessionRouter.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+sessionRouter.post(
+  "/login",
+  passport.authenticate("login", {
+    failureRedirect: "/api/sessions/loginFail",
+    session: false,
+  }),
+  async (req, res) => {
+    /*const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).send({ status: "error", error: "missing data" });
-  }
+    if (!email || !password) {
+      return res.status(400).send({ status: "error", error: "missing data" });
+    }*/
 
-  if (email == "adminCoder@coder.com" && password == "adminCod3r123") {
-    /** create user session */
-    req.session.user = {
-      name: "Admin",
-      email: "adminCoder@coder.com",
-      role: "admin",
-    };
-  } else {
-    const user = await userModel.findOne({ email: email });
-    if (!user) {
-      return res.status(401).send({ status: "error", error: "user not found" });
+    const user = req.user;
+
+    //if (email == "adminCoder@coder.com" && password == "adminCod3r123") {
+    if (
+      user.email == "adminCoder@coder.com" &&
+      user.password == "adminCod3r123"
+    ) {
+      /** create user session for admin */
+      req.session.user = {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      };
+    } else {
+      /*const user = await userModel.findOne({ email: email });
+      if (!user) {
+        return res
+          .status(401)
+          .send({ status: "error", error: "user not found" });
+      }
+
+      if (!isValidPassword(user, password)) {
+        return res
+          .status(401)
+          .send({ status: "error", error: "incorrect password" });
+      }*/
+
+      /** create user session */
+      req.session.user = {
+        name: `${user.first_name} ${user.last_name}`,
+        age: user.age,
+        email: user.email,
+        role: user.role,
+      };
     }
 
-    if (!isValidPassword(user, password)) {
-      return res
-        .status(401)
-        .send({ status: "error", error: "incorrect password" });
-    }
-
-    /** create user session */
-    req.session.user = {
-      name: `${user.first_name} ${user.last_name}`,
-      age: user.age,
-      email: user.email,
-      role: user.role,
-    };
+    /** service answer */
+    res.status(200).send({
+      status: "success",
+      payload: req.session.user,
+      message: "succesfully logged in",
+    });
   }
+);
 
-  /** service answer */
-  res.status(200).send({
-    status: "success",
-    payload: req.session.user,
-    message: "succesfully logged in",
-  });
+sessionRouter.get("/loginFail", (req, res) => {
+  res.status(401).send({ status: "error", error: "login fail" });
 });
+
+sessionRouter.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  (req, res) => {}
+);
+
+sessionRouter.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = {
+      name: `${req.user.first_name} ${req.user.last_name}`,
+      age: req.user.age,
+      email: req.user.email,
+      role: req.user.role,
+    };
+
+    res.redirect("/");
+  }
+);
 
 sessionRouter.get("/logout", (req, res) => {
   req.session.destroy((err) => {

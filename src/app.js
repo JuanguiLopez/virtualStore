@@ -4,8 +4,9 @@ const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const mongoStore = require("connect-mongo");
 const session = require("express-session");
-const sessionRouter = require("./routes/sessions.router");
 require("dotenv").config();
+const passport = require("passport");
+const initializePassport = require("./config/passport.config");
 
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
@@ -13,9 +14,11 @@ const messageModel = require("./dao/models/message");
 
 const port = 8080;
 
+/** routers */
 const productsRouter = require("./routes/products.router");
 const cartsRouter = require("./routes/carts.router");
 const viewsRouter = require("./routes/views.router");
+const sessionRouter = require("./routes/sessions.router");
 
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
 const prodManager = new ProductManager(); // MongoDB Manager
@@ -44,11 +47,17 @@ app.use(
   })
 );
 
+/** middlewares */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // config carpeta pública
 app.use(express.static(`${__dirname}/public`));
+
+/** passport */
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //config uso de handlebars
 app.engine("handlebars", handlebars.engine());
