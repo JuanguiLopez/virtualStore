@@ -52,13 +52,10 @@ sessionRouter.post(
     const user = req.user;
 
     //if (email == "adminCoder@coder.com" && password == "adminCod3r123") {
-    if (
-      user.email == "adminCoder@coder.com" &&
-      user.password == "adminCod3r123"
-    ) {
+    if (user.email == "adminCoder@coder.com") {
       /** create user session for admin */
       req.session.user = {
-        name: user.name,
+        name: user.first_name,
         email: user.email,
         role: user.role,
       };
@@ -78,9 +75,11 @@ sessionRouter.post(
 
       /** create user session */
       req.session.user = {
+        id: user._id,
         name: `${user.first_name} ${user.last_name}`,
         age: user.age,
         email: user.email,
+        cart: user.cart,
         role: user.role,
       };
     }
@@ -154,6 +153,11 @@ sessionRouter.post("/resetPassword", async (req, res) => {
     message: "password reset succesfully",
     details: result,
   });
+});
+
+sessionRouter.get("/current", (req, res) => {
+  user = req.session.user;
+  res.send({ payload: user });
 });
 
 module.exports = sessionRouter;

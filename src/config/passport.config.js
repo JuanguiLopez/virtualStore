@@ -57,8 +57,7 @@ const initializePassport = () => {
             password == "adminCod3r123"
           ) {
             let userAdmin = {
-              first_name: "Store",
-              last_name: "Admin",
+              first_name: "Admin",
               email: username,
               role: "admin",
             };
