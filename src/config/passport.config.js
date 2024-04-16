@@ -3,6 +3,7 @@ const local = require("passport-local");
 const github = require("passport-github2");
 const { createHash, isValidPassword } = require("../utils");
 const userModel = require("../dao/models/user");
+const { userAdmin, passAdmin } = require("./config");
 
 const localStrategy = local.Strategy;
 const githubStrategy = github.Strategy;
@@ -52,10 +53,7 @@ const initializePassport = () => {
       },
       async (username, password, done) => {
         try {
-          if (
-            username == "adminCoder@coder.com" &&
-            password == "adminCod3r123"
-          ) {
+          if (username == userAdmin && password == passAdmin) {
             let userAdmin = {
               first_name: "Admin",
               email: username,

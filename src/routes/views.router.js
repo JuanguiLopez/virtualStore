@@ -1,11 +1,5 @@
 const { Router } = require("express");
-//const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
-const ProductManager = require("../dao/dbManagers/ProductManager"); // MongoDB Manager
-const CartsManager = require("../dao/dbManagers/CartsManager");
-
-//const prodManager = new ProductManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
-const prodManager = new ProductManager(); // MongoDB Manager
-const cartManager = new CartsManager();
+const viewsController = require("../controllers/views.controller");
 
 const router = Router();
 
@@ -23,61 +17,30 @@ const validatePrivateAccess = (req, res, next) => {
 };
 
 /** routes */
-router.get("/", validatePrivateAccess, async (req, res) => {
-  const { page, limit, sort, query } = req.query;
-  let products = await prodManager.getProducts(page, limit, sort, query);
-  const productos = products.docs;
-  //console.log(productos);
+router.get("/", validatePrivateAccess, viewsController.getHome);
 
-  res.render("home", { productos, user: req.session.user });
-});
+router.get(
+  "/realtimeproducts",
+  validatePrivateAccess,
+  viewsController.getRealTimeItems
+);
 
-router.get("/realtimeproducts", validatePrivateAccess, async (req, res) => {
-  const { page, limit, sort, query } = req.query;
-  let products = await prodManager.getProducts(page, limit, sort, query);
-  const productos = products.docs;
+router.get("/products", validatePrivateAccess, viewsController.getProducts);
 
-  res.render("realTimeProducts", { productos });
-});
-
-router.get("/products", validatePrivateAccess, async (req, res) => {
-  const { page, limit, sort, query } = req.query;
-
-  let products = await prodManager.getProducts(page, limit, sort, query);
-  let { docs, ...rest } = products;
-
-  const productos = docs;
-  const prevLink = rest.prevLink;
-  const nextLink = rest.nextLink;
-
-  res.render("products", { productos, ...rest, prevLink, nextLink });
-});
-
-router.get("/carts/:cid", validatePrivateAccess, async (req, res) => {
-  const cartId = req.params.cid;
-  const cart = await cartManager.getCartById(cartId);
-
-  const products = cart.products;
-
-  res.render("carts", { products });
-});
+router.get("/carts/:cid", validatePrivateAccess, viewsController.getCart);
 
 /** chat */
-router.get("/chat", validatePublicAccess, (req, res) => {
-  res.render("chat", {});
-});
+router.get("/chat", validatePublicAccess, viewsController.getChat);
 
 /** register, login y reset password */
-router.get("/register", validatePublicAccess, (req, res) => {
-  res.render("register", {});
-});
+router.get("/register", validatePublicAccess, viewsController.getRegister);
 
-router.get("/login", validatePublicAccess, (req, res) => {
-  res.render("login", {});
-});
+router.get("/login", validatePublicAccess, viewsController.getLogin);
 
-router.get("/resetPassword", validatePublicAccess, (req, res) => {
-  res.render("resetPassword", {});
-});
+router.get(
+  "/resetPassword",
+  validatePublicAccess,
+  viewsController.getResetPassword
+);
 
 module.exports = router;

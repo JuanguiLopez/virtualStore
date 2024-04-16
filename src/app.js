@@ -7,12 +7,12 @@ const session = require("express-session");
 require("dotenv").config();
 const passport = require("passport");
 const initializePassport = require("./config/passport.config");
+const { port, mongoConnLink, sessionSecret } = require("./config/config");
 
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
 const messageModel = require("./dao/models/message");
-
-const port = 8080;
+const ProductsService = require("./services/products.service");
 
 /** routers */
 const productsRouter = require("./routes/products.router");
@@ -22,26 +22,23 @@ const sessionRouter = require("./routes/sessions.router");
 
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
 const prodManager = new ProductManager(); // MongoDB Manager
+const prodService = new ProductsService();
 
 const app = express();
 
 /** database connection */
-mongoose
-  .connect(
-    `mongodb+srv://juanguilopezh:${process.env.MONGO_PASSWORD}@coderhcluster.xwnfwp2.mongodb.net/ecommerce`
-  )
-  .then(() => {
-    console.log("connected to atlas.");
-  });
+mongoose.connect(mongoConnLink).then(() => {
+  console.log("connected to atlas.");
+});
 
 /** sessions settings (middleware) */
 app.use(
   session({
-    secret: "ourNewSecretJG",
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     store: mongoStore.create({
-      mongoUrl: `mongodb+srv://juanguilopezh:${process.env.MONGO_PASSWORD}@coderhcluster.xwnfwp2.mongodb.net/ecommerce`,
+      mongoUrl: mongoConnLink,
       ttl: 3600,
     }),
   })
@@ -86,7 +83,8 @@ io.on("connection", (socket) => {
 
   socket.on("crear producto", async (newProduct) => {
     await prodManager.addProduct(newProduct);
-    const products = await prodManager.getProducts(1, 10, "asc", "");
+    //const products = await prodManager.getProducts(1, 10, "asc", "");
+    const products = await prodService.getAll(1, 10, "asc", "");
     const productos = products.docs;
 
     io.emit("actualizar lista", { productos });
@@ -94,7 +92,8 @@ io.on("connection", (socket) => {
 
   socket.on("eliminar producto", async ({ id }) => {
     await prodManager.deleteProduct(id);
-    const products = await prodManager.getProducts(1, 10, "asc", "");
+    //const products = await prodManager.getProducts(1, 10, "asc", "");
+    const products = await prodService.getAll(1, 10, "asc", "");
     const productos = products.docs;
 
     io.emit("actualizar lista", { productos });
