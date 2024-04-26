@@ -1,4 +1,19 @@
 <main style="padding-left: 20px;">
+  <br>
+  <div class="navbar">
+    <p>Email: {{user.email}}</p>
+    <p>Rol: {{user.role}}</p>
+    <p>cart id: {{user.cart}}</p>
+  </div>
+
+  <h3>Carrito de compras</h3>
+  {{#each cart.products}}
+    <p>{{this.product.title}} | Cantidad: {{this.quantity}} | ${{this.product.price}} <button onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Borrar</button></p>
+  {{/each}}  
+  <button onclick="purchaseCart('{{user.cart}}')">Comprar</button>
+
+  <br />
+  <br />
   <h3>Productos disponibles</h3>
 
   <table>
@@ -23,7 +38,7 @@
           <td>{{this.stock}}</td>
           <td>{{this.category}}</td>
           <td>
-            <button>Agregar al carrito</button>
+            <button onclick="addToCart('{{../user.cart}}','{{this._id}}')">Agregar al carrito</button>
           </td>
         </tr>
       {{/each}}
@@ -39,9 +54,13 @@
   {{#if hasNextPage}}
     <a href="{{nextLink}}">Siguiente</a>
   {{/if}}
-
+  
+  <br />
+    <a href="/api/sessions/logout"><button>Salir</button></a>
+  <br />
+  <br>
 </main>
 
 <!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<script src="/js/products.js"></script>

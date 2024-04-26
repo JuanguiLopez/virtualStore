@@ -1,5 +1,9 @@
+const UserDTO = require("../dao/DTOs/UserDTO");
 const userModel = require("../dao/models/user");
+const MailingService = require("../services/mailing.service");
 const { createHash, isValidPassword } = require("../utils");
+
+const mailingService = new MailingService();
 
 class SessionsController {
   static async register(req, res) {
@@ -20,7 +24,8 @@ class SessionsController {
         role: "usuario",
       });
     */
-    res.send({ status: "success", message: "user registered" }); //, details: result });
+    await mailingService.sendRegistrationMail(req.session.user.email);
+    res.send({ status: "success", message: "user registered succesfully" }); //, details: result });
   }
 
   static async registerFail(req, res) {
@@ -88,6 +93,7 @@ class SessionsController {
       name: `${req.user.first_name} ${req.user.last_name}`,
       age: req.user.age,
       email: req.user.email,
+      cart: req.user.cart,
       role: req.user.role,
     };
 
@@ -132,8 +138,9 @@ class SessionsController {
   }
 
   static async current(req, res) {
-    user = req.session.user;
-    res.send({ payload: user });
+    const user = req.session.user;
+    const userDTO = new UserDTO(user);
+    res.send({ payload: userDTO });
   }
 }
 

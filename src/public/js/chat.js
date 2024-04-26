@@ -1,10 +1,10 @@
-let socket = io();
-let myUserName = "";
-
 /** Inputs references */
 const userNameTitle = document.getElementById("userNameTitle");
 const messageInput = document.getElementById("messageInput");
 const messagesLog = document.getElementById("messagesLog");
+
+let socket = io();
+let myUserName = userNameTitle.innerHTML;
 
 /** Socket events */
 
@@ -43,7 +43,7 @@ socket.on("newUser", ({ newUserName }) => {
 });
 
 /** Sweet Alert (Swal) */
-Swal.fire({
+/*Swal.fire({
   title: "Login",
   text: "Ingresa tu nombre de usuario para continuar",
   input: "email",
@@ -54,3 +54,4 @@ Swal.fire({
   console.log("myUserName:", myUserName);
   socket.emit("authenticated", { myUserName });
 });
+*/

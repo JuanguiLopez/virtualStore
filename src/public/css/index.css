@@ -11,3 +11,10 @@ table {
   font-size: larger;
   font-weight: 700;
 }
+
+.navbar {
+  color: white;
+  background-color: gray;
+  width: 400px;
+  padding: 5px 5px 5px 15px;
+}

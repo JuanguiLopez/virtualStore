@@ -1,8 +1,8 @@
-const ProductsManager = require("../dao/dbManagers/ProductManager");
+//const ProductsManager = require("../dao/dbManagers/ProductManager");
 
 class ProductsService {
-  constructor() {
-    this.dao = new ProductsManager();
+  constructor(dao) {
+    this.dao = dao; //new ProductsManager();
   }
 
   async getAll(queryPage, queryLimit, querySort, queryQ) {

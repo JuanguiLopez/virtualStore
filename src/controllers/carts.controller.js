@@ -4,21 +4,21 @@
 // MongoDB Manager
 //const CartsManager = require("../dao/dbManagers/CartsManager");
 //const ProductsManager = require("../dao/dbManagers/ProductManager");
-const CartsService = require("../services/carts.service"); // para uso de MongoDB Manager
-const ProductsService = require("../services/products.service"); // para uso de MongoDB Manager
+const { cartsService, productsService } = require("../repositories");
+//const CartsService = require("../services/carts.service"); // para uso de MongoDB Manager
+//const ProductsService = require("../services/products.service"); // para uso de MongoDB Manager
 
 //const cartManager = new CartsManager(__dirname + "/../files/cartsJG.json"); // FILE Manager
 //const prodManager = new ProductsManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
 //const prodManager = new ProductsManager(); // MongoDB Manager
 //const cartManager = new CartsManager(); // MongoDB Manager
-const cartsService = new CartsService(); // para uso de MongoDB Manager
-const prodService = new ProductsService(); // para uso de MongoDB Manager
+//const cartsService = new CartsService(); // para uso de MongoDB Manager
+//const prodService = new ProductsService(); // para uso de MongoDB Manager
 
 class CartsController {
   static async create(req, res) {
-    let cart = { products: [] };
     //await cartManager.addCart(cart);
-    await cartsService.create(cart);
+    await cartsService.create();
 
     res.send({ resultado: "success" });
   }
@@ -38,7 +38,7 @@ class CartsController {
     //const cart = await cartManager.getCartById(cartId);
     //const product = await prodManager.getProductById(prodId);
     const cart = await cartsService.getById(cartId);
-    const product = await prodService.getById(prodId);
+    const product = await productsService.getById(prodId);
 
     if (!cart) {
       res.status(400).send({ error: "carrito no existe" });
@@ -62,7 +62,7 @@ class CartsController {
     //const cart = await cartManager.getCartById(cartId);
     //const product = await prodManager.getProductById(prodId);
     const cart = await cartsService.getById(cartId);
-    const product = await prodService.getById(prodId);
+    const product = await productsService.getById(prodId);
 
     if (!cart) {
       res.status(400).send({ error: "carrito no existe" });
@@ -102,7 +102,7 @@ class CartsController {
     //const cart = await cartManager.getCartById(cartId);
     //const product = await prodManager.getProductById(prodId);
     const cart = await cartsService.getById(cartId);
-    const product = await prodService.getById(prodId);
+    const product = await productsService.getById(prodId);
 
     if (!cart) {
       res.status(400).send({ error: "carrito no existe" });
@@ -113,9 +113,9 @@ class CartsController {
     }
 
     //await cartManager.deleteProduct(cartId, prodId);
-    await cartsService.deleteProduct(cartId, prodId);
+    const result = await cartsService.deleteProduct(cartId, prodId);
 
-    res.send({ resultado: "success" });
+    res.send({ resultado: "success", payload: result });
   }
 
   static async deleteProducts(req, res) {
@@ -132,6 +132,24 @@ class CartsController {
     await cartsService.deleteProducts(cartId);
 
     res.send({ resultado: "success" });
+  }
+
+  static async purchase(req, res) {
+    const id = req.params.cid;
+
+    try {
+      const remainderProducts = await cartsService.purchase(
+        id,
+        req.session.user.email
+      );
+
+      res.send({ status: "success", payload: remainderProducts });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(error.status || 500)
+        .send({ status: "error", error: error.message });
+    }
   }
 }
 

@@ -2,7 +2,7 @@ const cartModel = require("../models/carts");
 
 class CartsManager {
   async addCart(cart) {
-    await cartModel.create(cart);
+    return await cartModel.create(cart);
   }
 
   async getCartById(id) {

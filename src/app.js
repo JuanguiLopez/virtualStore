@@ -1,7 +1,6 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
 const { Server } = require("socket.io");
-const mongoose = require("mongoose");
 const mongoStore = require("connect-mongo");
 const session = require("express-session");
 require("dotenv").config();
@@ -19,17 +18,13 @@ const productsRouter = require("./routes/products.router");
 const cartsRouter = require("./routes/carts.router");
 const viewsRouter = require("./routes/views.router");
 const sessionRouter = require("./routes/sessions.router");
+const { productsService } = require("./repositories");
 
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
 const prodManager = new ProductManager(); // MongoDB Manager
 const prodService = new ProductsService();
 
 const app = express();
-
-/** database connection */
-mongoose.connect(mongoConnLink).then(() => {
-  console.log("connected to atlas.");
-});
 
 /** sessions settings (middleware) */
 app.use(
@@ -82,18 +77,25 @@ io.on("connection", (socket) => {
   });
 
   socket.on("crear producto", async (newProduct) => {
-    await prodManager.addProduct(newProduct);
+    //await prodManager.addProduct(newProduct);
+    //await prodService.create(newProduct);
+    await productsService.create(newProduct);
+
     //const products = await prodManager.getProducts(1, 10, "asc", "");
-    const products = await prodService.getAll(1, 10, "asc", "");
+    //const products = await prodService.getAll(1, 10, "asc", "");
+    const products = await productsService.getAll(1, 10, "asc", "");
     const productos = products.docs;
 
     io.emit("actualizar lista", { productos });
   });
 
   socket.on("eliminar producto", async ({ id }) => {
-    await prodManager.deleteProduct(id);
+    //await prodManager.deleteProduct(id);
+    //await prodService.delete(id);
+    await productsService.delete(id);
     //const products = await prodManager.getProducts(1, 10, "asc", "");
-    const products = await prodService.getAll(1, 10, "asc", "");
+    //const products = await prodService.getAll(1, 10, "asc", "");
+    const products = await productsService.getAll(1, 10, "asc", "");
     const productos = products.docs;
 
     io.emit("actualizar lista", { productos });

@@ -1,10 +1,11 @@
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 //const ProductManager = require("../dao/dbManagers/ProductManager"); // MongoDB Manager
-const ProductsService = require("../services/products.service"); // para uso de MongoDB Manager
+const { productsService } = require("../repositories/index");
+//const ProductsService = require("../services/products.service"); // para uso de MongoDB Manager
 
 //const prodManager = new ProductManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
 //const prodManager = new ProductManager(); // MongoDB Manager
-const prodService = new ProductsService(); // para uso de MongoDB Manager
+//const prodService = new ProductsService(); // para uso de MongoDB Manager
 
 class ProductsController {
   static async getAll(req, res) {
@@ -15,7 +16,7 @@ class ProductsController {
     let status = "success";
 
     //products = await prodManager.getProducts(page, limit, sort, query);
-    const products = await prodService.getAll(page, limit, sort, query);
+    const products = await productsService.getAll(page, limit, sort, query);
 
     const pageData = {
       status: status,
@@ -41,7 +42,7 @@ class ProductsController {
     const id = req.params.pid;
 
     //const product = await prodManager.getProductById(id);
-    const product = await prodService.getById(id);
+    const product = await productsService.getById(id);
 
     if (!product) {
       res.send({ error: "producto no encontrado" });
@@ -53,7 +54,7 @@ class ProductsController {
   static async create(req, res) {
     const product = req.body;
     //await prodManager.addProduct(product);
-    await prodService.create(product);
+    await productsService.create(product);
 
     res.send({ resultado: "success", payload: product });
   }
@@ -63,7 +64,7 @@ class ProductsController {
     let infoToUpdate = req.body;
 
     //await prodManager.updateProduct(id, infoToUpdate);
-    await prodService.update(id, infoToUpdate);
+    await productsService.update(id, infoToUpdate);
 
     res.send({ resultado: "success", payload: infoToUpdate });
   }
@@ -71,7 +72,7 @@ class ProductsController {
   static async delete(req, res) {
     const id = req.params.pid;
     //await prodManager.deleteProduct(id);
-    await prodService.delete(id);
+    await productsService.delete(id);
 
     res.send({ resultado: "success" });
   }

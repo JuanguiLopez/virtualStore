@@ -1,20 +1,10 @@
 const { Router } = require("express");
 const viewsController = require("../controllers/views.controller");
+const validatePrivateAccess = require("../middlewares/validatePrivateAccess.middleware");
+const validatePublicAccess = require("../middlewares/validatePublicAccess.middleware");
+const checkRole = require("../middlewares/checkRole.middleware");
 
 const router = Router();
-
-/** middlewares */
-const validatePublicAccess = (req, res, next) => {
-  if (req.session.user) return res.redirect("/");
-
-  next();
-};
-
-const validatePrivateAccess = (req, res, next) => {
-  if (!req.session.user) return res.redirect("/login");
-
-  next();
-};
 
 /** routes */
 router.get("/", validatePrivateAccess, viewsController.getHome);
@@ -22,6 +12,7 @@ router.get("/", validatePrivateAccess, viewsController.getHome);
 router.get(
   "/realtimeproducts",
   validatePrivateAccess,
+  checkRole("admin"),
   viewsController.getRealTimeItems
 );
 
@@ -30,7 +21,12 @@ router.get("/products", validatePrivateAccess, viewsController.getProducts);
 router.get("/carts/:cid", validatePrivateAccess, viewsController.getCart);
 
 /** chat */
-router.get("/chat", validatePublicAccess, viewsController.getChat);
+router.get(
+  "/chat",
+  validatePrivateAccess,
+  checkRole("usuario"),
+  viewsController.getChat
+);
 
 /** register, login y reset password */
 router.get("/register", validatePublicAccess, viewsController.getRegister);

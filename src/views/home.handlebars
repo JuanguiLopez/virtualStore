@@ -1,17 +1,16 @@
-<h1 style="padding-left: 20px;">Hola
-  {{user.name}}, te damos la bienvenida a tu tienda favorita!</h1>
-
-<div style="padding-left: 20px;">
-  <p>Email: {{user.email}}</p>
-  {{#if user.age}}
-    <p>Edad: {{user.age}}</p>
-  {{/if}}
-  <p>Rol: {{user.role}}</p>
-</div>
-<br />
-<h3 style="padding-left: 20px;">Estos son los productos disponibles</h3>
-
 <main style="padding-left: 20px;">
+  <h1>Hola {{user.name}}, te damos la bienvenida a tu tienda favorita!</h1>
+
+  <div class="navbar">
+    <p>Email: {{user.email}}</p>
+    {{#if user.age}}
+      <p>Edad: {{user.age}}</p>
+    {{/if}}
+    <p>Rol: {{user.role}}</p>
+  </div>
+  <br />
+  <h3>Estos son los productos disponibles</h3>
+
   <table>
     <thead>
       <tr>
@@ -37,14 +36,13 @@
       {{/each}}
     </tbody>
   </table>
-</main>
 
-<br />
-<br />
-<a style="padding-left: 20px;" href="/api/sessions/logout">
-  <button>Salir</button>
-</a>
+  <br />
+  <br />
+  <a href="/api/sessions/logout">
+    <button>Salir</button>
+  </a>
+</main>
 
 <!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>

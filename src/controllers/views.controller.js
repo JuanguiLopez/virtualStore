@@ -1,18 +1,19 @@
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 //const ProductManager = require("../dao/dbManagers/ProductManager"); // MongoDB Manager
-const CartsManager = require("../dao/dbManagers/CartsManager");
-const ProductsService = require("../services/products.service");
+//const CartsManager = require("../dao/dbManagers/CartsManager");
+//const ProductsService = require("../services/products.service");
+const { cartsService, productsService } = require("../repositories");
 
 //const prodManager = new ProductManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
 //const prodManager = new ProductManager(); // MongoDB Manager
-const prodService = new ProductsService(); // para uso de MongoDB Manager
-const cartManager = new CartsManager();
+//const prodService = new ProductsService(); // para uso de MongoDB Manager
+//const cartManager = new CartsManager();
 
 class viewsController {
   static async getHome(req, res) {
     const { page, limit, sort, query } = req.query;
     //let products = await prodManager.getProducts(page, limit, sort, query);
-    let products = await prodService.getAll(page, limit, sort, query);
+    let products = await productsService.getAll(page, limit, sort, query);
     const productos = products.docs;
     //console.log("PROD", productos);
 
@@ -22,7 +23,7 @@ class viewsController {
   static async getRealTimeItems(req, res) {
     const { page, limit, sort, query } = req.query;
     //let products = await prodManager.getProducts(page, limit, sort, query);
-    let products = await prodService.getAll(page, limit, sort, query);
+    let products = await productsService.getAll(page, limit, sort, query);
     const productos = products.docs;
 
     res.render("realTimeProducts", { productos });
@@ -32,19 +33,28 @@ class viewsController {
     const { page, limit, sort, query } = req.query;
 
     //let products = await prodManager.getProducts(page, limit, sort, query);
-    let products = await prodService.getAll(page, limit, sort, query);
+    let products = await productsService.getAll(page, limit, sort, query);
     let { docs, ...rest } = products;
 
     const productos = docs;
     const prevLink = rest.prevLink;
     const nextLink = rest.nextLink;
 
-    res.render("products", { productos, ...rest, prevLink, nextLink });
+    const cart = await cartsService.getByIdPop(req.session.user.cart);
+
+    res.render("products", {
+      productos,
+      ...rest,
+      prevLink,
+      nextLink,
+      user: req.session.user,
+      cart,
+    });
   }
 
   static async getCart(req, res) {
     const cartId = req.params.cid;
-    const cart = await cartManager.getCartByIdPop(cartId);
+    const cart = await cartsService.getByIdPop(cartId);
 
     const products = cart.products;
 
@@ -52,7 +62,7 @@ class viewsController {
   }
 
   static getChat(req, res) {
-    res.render("chat", {});
+    res.render("chat", { user: req.session.user });
   }
 
   static getRegister(req, res) {
