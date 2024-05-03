@@ -1,6 +1,10 @@
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 //const ProductManager = require("../dao/dbManagers/ProductManager"); // MongoDB Manager
 const { productsService } = require("../repositories/index");
+const CustomError = require("../utils/errorHandling/CustomError");
+const ErrorTypes = require("../utils/errorHandling/ErrorTypes");
+const { getProductErrorInfo } = require("../utils/errorHandling/errorInfo");
+const { generateProduct } = require("../utils/utils");
 //const ProductsService = require("../services/products.service"); // para uso de MongoDB Manager
 
 //const prodManager = new ProductManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
@@ -38,6 +42,17 @@ class ProductsController {
     res.send({ resultado: "success", pageData });
   }
 
+  static async generateProducts(req, res) {
+    const quantity = req.query.quantity || 100;
+    const products = [];
+
+    for (let i = 0; i < quantity; i++) {
+      products.push(generateProduct());
+    }
+
+    res.send({ resultado: "success", payload: products });
+  }
+
   static async getById(req, res) {
     const id = req.params.pid;
 
@@ -51,12 +66,37 @@ class ProductsController {
     res.send({ resultado: "success", payload: product });
   }
 
-  static async create(req, res) {
-    const product = req.body;
-    //await prodManager.addProduct(product);
-    await productsService.create(product);
+  static async create(req, res, next) {
+    try {
+      const { title, description, code, stock, price, category } = req.body;
 
-    res.send({ resultado: "success", payload: product });
+      if (!title || !description || !code || !stock || !price || !category) {
+        throw new CustomError({
+          name: "Product creation error",
+          cause: getProductErrorInfo({
+            title,
+            description,
+            code,
+            stock,
+            price,
+            category,
+          }),
+          message: "Error creating a product",
+          code: ErrorTypes.INVALID_TYPE_ERROR,
+        });
+      }
+
+      const product = { title, description, code, stock, price, category };
+
+      await productsService.create(product);
+      //const product = req.body;
+      //console.log("product ---->", product);
+      //await productsService.create(product);
+
+      res.send({ resultado: "success", payload: product });
+    } catch (error) {
+      next(error);
+    }
   }
 
   static async update(req, res) {

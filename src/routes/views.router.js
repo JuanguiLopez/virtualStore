@@ -7,6 +7,7 @@ const checkRole = require("../middlewares/checkRole.middleware");
 const router = Router();
 
 /** routes */
+
 router.get("/", validatePrivateAccess, viewsController.getHome);
 
 router.get(

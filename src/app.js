@@ -7,6 +7,7 @@ require("dotenv").config();
 const passport = require("passport");
 const initializePassport = require("./config/passport.config");
 const { port, mongoConnLink, sessionSecret } = require("./config/config");
+const errorHandling = require("./middlewares/errorHandling.middleware");
 
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
@@ -19,6 +20,9 @@ const cartsRouter = require("./routes/carts.router");
 const viewsRouter = require("./routes/views.router");
 const sessionRouter = require("./routes/sessions.router");
 const { productsService } = require("./repositories");
+const { getRouteErrorInfo } = require("./utils/errorHandling/errorInfo");
+const CustomError = require("./utils/errorHandling/CustomError");
+const ErrorTypes = require("./utils/errorHandling/ErrorTypes");
 
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
 const prodManager = new ProductManager(); // MongoDB Manager
@@ -61,6 +65,20 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", sessionRouter);
 app.use("/", viewsRouter);
+
+/** Manejo de errores para rutas no especificadas en la raíz */
+app.use((req, res, next) => {
+  try {
+    throw new CustomError({
+      name: "Incorrect route",
+      cause: getRouteErrorInfo(),
+      message: "The route you are trying to reach does not exist",
+      code: ErrorTypes.ROUTING_ERROR,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 //-----------------------
 const server = app.listen(port, () =>
@@ -115,3 +133,5 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("newUser", { newUserName: myUserName });
   });
 });
+
+app.use(errorHandling);

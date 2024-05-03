@@ -1,7 +1,7 @@
 const passport = require("passport");
 const local = require("passport-local");
 const github = require("passport-github2");
-const { createHash, isValidPassword } = require("../utils");
+const { createHash, isValidPassword } = require("../utils/utils");
 const userModel = require("../dao/models/user");
 const { userAdmin, passAdmin } = require("./config");
 const { cartsService, usersService } = require("../repositories");

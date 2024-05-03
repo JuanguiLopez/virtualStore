@@ -8,7 +8,7 @@ class ProductsService {
   async getAll(queryPage, queryLimit, querySort, queryQ) {
     //return await this.dao.getProducts(queryPage, queryLimit, querySort, queryQ);
     let page = queryPage || 1;
-    let limit = queryLimit || 10;
+    let limit = queryLimit || 20;
     let sort = querySort
       ? { price: querySort == "asc" ? 1 : -1 }
       : `limit: ${limit}`;

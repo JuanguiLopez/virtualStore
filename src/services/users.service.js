@@ -1,3 +1,6 @@
+const MailingService = require("../services/mailing.service");
+const mailingService = new MailingService();
+
 class UsersService {
   constructor(dao) {
     this.dao = dao;
@@ -15,11 +18,11 @@ class UsersService {
     let user;
     try {
       user = await this.dao.getByProperty(property, value);
-      if (!user)
+      /*if (!user)
         throw {
           message: `There's no user by ${property} = ${value}`,
           status: 400,
-        };
+        };*/
     } catch (error) {
       console.log("ERROR user service", error);
     }
@@ -27,6 +30,7 @@ class UsersService {
   }
 
   async create(user) {
+    await mailingService.sendRegistrationMail(user.email);
     return await this.dao.create(user);
   }
 

@@ -20,32 +20,30 @@ newProductForm.addEventListener("submit", AgregarProducto);
 //btnAgregar.addEventListener("click", () => {
 function AgregarProducto(e) {
   e.preventDefault();
+  const formData = new FormData(newProductForm);
+  const payload = {};
+  formData.forEach((value, key) => (payload[key] = value));
+
+  fetch("/api/products", {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: {
+      "Content-type": "application/json",
+    },
+  }).then((res) => {
+    if (res.status == 200) {
+      window.location.reload();
+    }
+  });
+  /*
   const formData = new FormData(e.target);
   const infoProd = Object.fromEntries(formData.entries());
-  //console.log("info form:", infoProd);
+  console.log("info form:", infoProd);
   socket.emit("crear producto", infoProd);
 
   e.target.reset(); // Para limpiar el formulario
-
-  /*socket.emit("crear producto", {
-    title: iptTitulo.value,
-    description: iptDescripcion.value,
-    code: iptCodigo.value,
-    price: iptPrecio.value,
-    stock: iptStock.value,
-    category: iptCategoria.value,
-    //thumbnails: fiThumbnails.value,
-  });
-
-  iptTitulo.value = "";
-  iptDescripcion.value = "";
-  iptCodigo.value = "";
-  iptPrecio.value = "";
-  iptStock.value = "";
-  iptCategoria.value = "";
-  //fiThumbnails.value = "";
   */
-} //);
+}
 
 // Eventos server
 socket.on("actualizar lista", ({ productos }) => {

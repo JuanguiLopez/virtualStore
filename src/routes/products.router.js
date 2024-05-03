@@ -6,6 +6,8 @@ const router = Router();
 
 router.get("/", ProductsController.getAll);
 
+router.get("/mockingproducts", ProductsController.generateProducts);
+
 router.get("/:pid", ProductsController.getById);
 
 router.post("/", checkRole("admin"), ProductsController.create);

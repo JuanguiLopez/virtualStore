@@ -1,9 +1,6 @@
 const UserDTO = require("../dao/DTOs/UserDTO");
 const userModel = require("../dao/models/user");
-const MailingService = require("../services/mailing.service");
-const { createHash, isValidPassword } = require("../utils");
-
-const mailingService = new MailingService();
+const { createHash, isValidPassword } = require("../utils/utils");
 
 class SessionsController {
   static async register(req, res) {
@@ -24,7 +21,8 @@ class SessionsController {
         role: "usuario",
       });
     */
-    await mailingService.sendRegistrationMail(req.session.user.email);
+
+    //await mailingService.sendRegistrationMail(email);
     res.send({ status: "success", message: "user registered succesfully" }); //, details: result });
   }
 
