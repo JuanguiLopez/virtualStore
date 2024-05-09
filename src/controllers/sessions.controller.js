@@ -27,6 +27,7 @@ class SessionsController {
   }
 
   static async registerFail(req, res) {
+    req.logger.fatal(`something went wrong in the register process`);
     res.status(401).send({ status: "error", error: "authentication error" });
   }
 
@@ -71,6 +72,7 @@ class SessionsController {
         role: user.role,
       };
     }
+    req.logger.debug(`sesión creada correctamente!`);
 
     /** service answer */
     res.status(200).send({
@@ -81,6 +83,7 @@ class SessionsController {
   }
 
   static async loginFail(req, res) {
+    req.logger.warning(`login fail`);
     res.status(401).send({ status: "error", error: "login fail" });
   }
 
@@ -105,6 +108,7 @@ class SessionsController {
           .status(500)
           .send({ status: "error", error: "there was an error login out" });
 
+      req.logger.info(`user logged out`);
       res.redirect("/login");
     });
   }

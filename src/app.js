@@ -7,7 +7,12 @@ require("dotenv").config();
 const passport = require("passport");
 const initializePassport = require("./config/passport.config");
 const { port, mongoConnLink, sessionSecret } = require("./config/config");
+const { productsService } = require("./repositories");
+const { getRouteErrorInfo } = require("./utils/errorHandling/errorInfo");
 const errorHandling = require("./middlewares/errorHandling.middleware");
+const CustomError = require("./utils/errorHandling/CustomError");
+const ErrorTypes = require("./utils/errorHandling/ErrorTypes");
+const addLogger = require("./middlewares/addLogger.middleware");
 
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
 const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
@@ -19,16 +24,16 @@ const productsRouter = require("./routes/products.router");
 const cartsRouter = require("./routes/carts.router");
 const viewsRouter = require("./routes/views.router");
 const sessionRouter = require("./routes/sessions.router");
-const { productsService } = require("./repositories");
-const { getRouteErrorInfo } = require("./utils/errorHandling/errorInfo");
-const CustomError = require("./utils/errorHandling/CustomError");
-const ErrorTypes = require("./utils/errorHandling/ErrorTypes");
+const loggersRouter = require("./routes/loggers.router");
 
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
-const prodManager = new ProductManager(); // MongoDB Manager
-const prodService = new ProductsService();
+//const prodManager = new ProductManager(); // MongoDB Manager
+//const prodService = new ProductsService();
 
 const app = express();
+
+/** logger middleware */
+app.use(addLogger);
 
 /** sessions settings (middleware) */
 app.use(
@@ -55,15 +60,16 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-//config uso de handlebars
+/** config uso de handlebars */
 app.engine("handlebars", handlebars.engine());
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "handlebars");
 
-// asigna endpoints a routers
+/** asigna endpoints a routers */
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", sessionRouter);
+app.use("/api/loggers", loggersRouter);
 app.use("/", viewsRouter);
 
 /** Manejo de errores para rutas no especificadas en la raíz */

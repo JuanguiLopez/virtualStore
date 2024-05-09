@@ -48,6 +48,9 @@ class CartsController {
       res.status(400).send({ error: "producto no existe" });
     }
 
+    req.logger.info(
+      `producto agregado al carrito exitosamente por el usuario ${req.session.user.email}.`
+    );
     //await cartManager.addProduct(cartId, prodId);
     await cartsService.addProduct(cartId, prodId);
 
@@ -75,6 +78,9 @@ class CartsController {
     //await cartManager.updateProduct(cartId, prodId, newQuantity);
     await cartsService.updateProduct(cartId, prodId, newQuantity);
 
+    req.logger.info(
+      `producto actualizado exitosamente por el usuario ${req.session.user.email}.`
+    );
     res.send({ resultado: "success" });
   }
 
@@ -115,6 +121,9 @@ class CartsController {
     //await cartManager.deleteProduct(cartId, prodId);
     const result = await cartsService.deleteProduct(cartId, prodId);
 
+    req.logger.info(
+      `producto ${product} eliminado exitosamente por el usuario ${req.session.user.email}.`
+    );
     res.send({ resultado: "success", payload: result });
   }
 
@@ -143,6 +152,9 @@ class CartsController {
         req.session.user.email
       );
 
+      req.logger.info(
+        `compra de productos realizada exitosamente por el usuario ${req.session.user.email}.`
+      );
       res.send({ status: "success", payload: remainderProducts });
     } catch (error) {
       console.log(error);

@@ -39,6 +39,7 @@ class ProductsController {
         : null,
     };
 
+    req.logger.debug(`productos cargados correctamente!`);
     res.send({ resultado: "success", pageData });
   }
 
@@ -50,6 +51,7 @@ class ProductsController {
       products.push(generateProduct());
     }
 
+    req.logger.info(`solicitud de productos mockeados exitosa.`);
     res.send({ resultado: "success", payload: products });
   }
 
@@ -63,6 +65,7 @@ class ProductsController {
       res.send({ error: "producto no encontrado" });
     }
 
+    req.logger.debug(`producto ${product} obtenido correctamente!`);
     res.send({ resultado: "success", payload: product });
   }
 
@@ -93,20 +96,25 @@ class ProductsController {
       //console.log("product ---->", product);
       //await productsService.create(product);
 
+      req.logger.info(`producto creado correctamente.`);
       res.send({ resultado: "success", payload: product });
     } catch (error) {
       next(error);
     }
   }
 
-  static async update(req, res) {
-    const id = req.params.pid;
-    let infoToUpdate = req.body;
+  static async update(req, res, next) {
+    try {
+      const id = req.params.pid;
+      let infoToUpdate = req.body;
 
-    //await prodManager.updateProduct(id, infoToUpdate);
-    await productsService.update(id, infoToUpdate);
+      //await prodManager.updateProduct(id, infoToUpdate);
+      await productsService.update(id, infoToUpdate);
 
-    res.send({ resultado: "success", payload: infoToUpdate });
+      res.send({ resultado: "success", payload: infoToUpdate });
+    } catch (error) {
+      next(error);
+    }
   }
 
   static async delete(req, res) {
@@ -114,6 +122,7 @@ class ProductsController {
     //await prodManager.deleteProduct(id);
     await productsService.delete(id);
 
+    req.logger.info(`producto eliminado correctamente.`);
     res.send({ resultado: "success" });
   }
 }

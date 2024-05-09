@@ -26,6 +26,7 @@ const initializePassport = () => {
 
         try {
           if (user) {
+            req.logger.warning(`user with email ${user.email} already exists.`);
             return done(null, false, { message: "user already exists." });
           }
 
@@ -45,6 +46,7 @@ const initializePassport = () => {
           //const result = await userModel.create(newUser);
           const result = await usersService.create(newUser);
 
+          req.logger.info(`usuario ${email} creado correctamente.`);
           return done(null, result);
         } catch (error) {
           return done(error);
@@ -57,10 +59,13 @@ const initializePassport = () => {
     "login",
     new localStrategy(
       {
+        passReqToCallback: true,
         usernameField: "email",
       },
-      async (username, password, done) => {
+      async (req, username, password, done) => {
         try {
+          req.logger.info(`login attemp - email: ${username}`);
+
           if (username == userAdmin && password == passAdmin) {
             let userAdmin = {
               first_name: "Admin",
@@ -68,6 +73,7 @@ const initializePassport = () => {
               role: "admin",
             };
 
+            req.logger.info(`admin user logged`);
             return done(null, userAdmin);
           } else {
             //const user = await userModel.findOne({ email: username });
@@ -81,6 +87,7 @@ const initializePassport = () => {
               return done(null, false, { message: "incorrect password" });
             }
 
+            req.logger.info(`user logged in with email and password`);
             return done(null, user);
           }
         } catch (error) {
@@ -94,12 +101,17 @@ const initializePassport = () => {
     "github",
     new githubStrategy(
       {
+        passReqToCallback: true,
         clientID: "Iv1.6f21e9f4a7958fd1",
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
         clientSecret: "880022b93683fe56bb7f6f0f7ed8e85657adc2e1",
       },
-      async (_accesToken, _refreshToken, profile, done) => {
+      async (req, _accesToken, _refreshToken, profile, done) => {
         try {
+          req.logger.info(
+            `login attemp with github - email: ${profile._json.email}`
+          );
+
           //const user = await userModel.findOne({ email: profile._json.email });
           const user = await usersService.getByProperty(
             "email",
@@ -120,8 +132,10 @@ const initializePassport = () => {
             //const result = await userModel.create(newUser);
             const result = await usersService.create(newUser);
 
+            req.logger.info(`user logged in with Github`);
             return done(null, result);
           } else {
+            req.logger.info(`user logged in with Github`);
             return done(null, user);
           }
         } catch (error) {
