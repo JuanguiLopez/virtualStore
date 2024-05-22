@@ -11,7 +11,7 @@ class UsersService {
   }
 
   async getById(id) {
-    return await this.dao.getProductById(id);
+    return await this.dao.getById(id);
   }
 
   async getByProperty(property, value) {

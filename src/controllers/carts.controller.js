@@ -40,21 +40,37 @@ class CartsController {
     const cart = await cartsService.getById(cartId);
     const product = await productsService.getById(prodId);
 
-    if (!cart) {
-      res.status(400).send({ error: "carrito no existe" });
+    try {
+      if (
+        req.session.user.role == "premium" &&
+        product.owner == req.session.user.email
+      ) {
+        throw new Error(
+          `Can't add this product to cart because it belongs to you.`
+        );
+      }
+
+      if (!cart) {
+        return res.status(400).send({ error: "carrito no existe" });
+      }
+
+      if (!product) {
+        return res.status(400).send({ error: "producto no existe" });
+      }
+
+      req.logger.info(
+        `producto agregado al carrito exitosamente por el usuario ${req.session.user.email}.`
+      );
+      //await cartManager.addProduct(cartId, prodId);
+      const result = await cartsService.addProduct(cartId, prodId);
+
+      res.send({ resultado: "success", payload: result });
+    } catch (error) {
+      req.logger.error(error);
+      return res
+        .status(error.status || 500)
+        .send({ status: "error", error: error.message });
     }
-
-    if (!product) {
-      res.status(400).send({ error: "producto no existe" });
-    }
-
-    req.logger.info(
-      `producto agregado al carrito exitosamente por el usuario ${req.session.user.email}.`
-    );
-    //await cartManager.addProduct(cartId, prodId);
-    await cartsService.addProduct(cartId, prodId);
-
-    res.send({ resultado: "success" });
   }
 
   static async updateProduct(req, res) {

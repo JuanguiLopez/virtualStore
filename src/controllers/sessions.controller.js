@@ -1,6 +1,12 @@
+const { jwtSecret } = require("../config/config");
 const UserDTO = require("../dao/DTOs/UserDTO");
 const userModel = require("../dao/models/user");
+const { usersService } = require("../repositories");
+const MailingService = require("../services/mailing.service");
 const { createHash, isValidPassword } = require("../utils/utils");
+const jwt = require("jsonwebtoken");
+
+const mailingService = new MailingService();
 
 class SessionsController {
   static async register(req, res) {
@@ -113,6 +119,35 @@ class SessionsController {
     });
   }
 
+  static async sendEmailResPass(req, res) {
+    const email = req.body.email;
+    let user = await usersService.getByProperty("email", email);
+
+    if (!user) {
+      res
+        .status(400)
+        .send({ status: "error", error: "not a valid user email" });
+    }
+
+    await mailingService.sendPasswordResetMail(user, email);
+    res.send({ payload: true });
+  }
+
+  static async validateToken(req, res) {
+    const { passwordResetToken } = req.params;
+
+    try {
+      jwt.verify(passwordResetToken, jwtSecret, (error) => {
+        if (error) {
+          return res.redirect("/sendEmailResPass");
+        }
+
+        res.redirect("/resetPassword");
+      });
+    } catch (error) {
+      res.status(500).send({ status: "error", error: error.message });
+    }
+  }
   static async resetPassword(req, res) {
     const { email, password } = req.body;
 
@@ -120,9 +155,14 @@ class SessionsController {
       return res.status(400).send({ status: "error", error: "missing data" });
     }
 
-    const user = await userModel.findOne({ email: email });
+    //const user = await userModel.findOne({ email: email });
+    const user = await usersService.getByProperty("email", email);
     if (!user) {
       return res.status(401).send({ status: "error", error: "user not found" });
+    }
+
+    if (isValidPassword(user, password)) {
+      return res.status(400).send({ status: "error", error: "same password" });
     }
 
     const hashedPassword = createHash(password);

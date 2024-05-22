@@ -10,7 +10,7 @@ router.post("/", CartsController.create);
 
 router.post(
   "/:cid/product/:pid",
-  checkRole("usuario"),
+  checkRole(["usuario", "premium"]),
   CartsController.addProduct
 );
 

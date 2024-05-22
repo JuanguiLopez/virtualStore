@@ -40,6 +40,13 @@ sessionRouter.get(
 
 sessionRouter.get("/logout", SessionsController.logout);
 
+sessionRouter.post("/sendEmailResPass", SessionsController.sendEmailResPass);
+
+sessionRouter.get(
+  "/validateToken/:passwordResetToken",
+  SessionsController.validateToken
+);
+
 sessionRouter.post("/resetPassword", SessionsController.resetPassword);
 
 sessionRouter.get("/current", SessionsController.current);

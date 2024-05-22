@@ -21,5 +21,17 @@ resetPasswordForm.addEventListener("submit", (e) => {
         window.location.href = "/login"; // <- redirección desde el front
       }, 2000);
     }
+    if (res.status == 400) {
+      //alert("400");
+      res.json().then((res) => {
+        if (res.error == "same password") {
+          let passwordErrorMessage = document.getElementById(
+            "passwordErrorMessage"
+          );
+          passwordErrorMessage.innerHTML =
+            "No puedes usar el mismo password que tienes actualmente.";
+        }
+      });
+    }
   });
 });

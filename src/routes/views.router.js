@@ -13,7 +13,7 @@ router.get("/", validatePrivateAccess, viewsController.getHome);
 router.get(
   "/realtimeproducts",
   validatePrivateAccess,
-  checkRole("admin"),
+  checkRole(["admin", "premium"]),
   viewsController.getRealTimeItems
 );
 
@@ -38,6 +38,12 @@ router.get(
   "/resetPassword",
   validatePublicAccess,
   viewsController.getResetPassword
+);
+
+router.get(
+  "/sendEmailResPass",
+  validatePublicAccess,
+  viewsController.getSendEmailResPass
 );
 
 module.exports = router;

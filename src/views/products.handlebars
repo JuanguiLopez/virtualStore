@@ -25,7 +25,7 @@
         <th>Precio</th>
         <th>Stock</th>
         <th>Categoria</th>
-        <th>Acciones</th>
+        <th>Owner</th>
       </tr>
     </thead>
     <tbody id="realTimeTable">
@@ -37,6 +37,7 @@
           <td>${{this.price}}</td>
           <td>{{this.stock}}</td>
           <td>{{this.category}}</td>
+          <td>{{this.owner}}</td>
           <td>
             <button onclick="addToCart('{{../user.cart}}','{{this._id}}')">Agregar al carrito</button>
           </td>

@@ -9,6 +9,10 @@ const productSchema = new mongoose.Schema({
   status: Boolean,
   stock: Number,
   category: String,
+  owner: {
+    type: String,
+    default: "adminCoder@coder.com",
+  },
   thumbnails: {
     type: [String],
     default: [],

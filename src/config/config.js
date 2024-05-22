@@ -22,6 +22,7 @@ module.exports = {
   sessionSecret: process.env.SESSION_SECRET,
   userAdmin: process.env.USER_ADMIN,
   passAdmin: process.env.PASS_ADMIN,
+  jwtSecret: process.env.JWT_SECRET,
   persistence: options.persistence,
   mailing: {
     service: process.env.MAIL_SERVICE,

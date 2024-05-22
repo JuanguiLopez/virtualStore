@@ -76,6 +76,10 @@ class viewsController {
   static getResetPassword(req, res) {
     res.render("resetPassword", {});
   }
+
+  static getSendEmailResPass(req, res) {
+    res.render("sendEmailResPass", {});
+  }
 }
 
 module.exports = viewsController;

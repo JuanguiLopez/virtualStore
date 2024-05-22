@@ -89,15 +89,21 @@ class ProductsController {
         });
       }
 
-      const product = { title, description, code, stock, price, category };
+      if (req.session.user.role == "premium") {
+        req.body.owner = req.session.user.email;
+      }
 
-      await productsService.create(product);
+      //const product = {title, description, code, price, stock, category};
+
+      //await productsService.create(product);
+      await productsService.create(req.body);
+      const products = await productsService.getAll();
       //const product = req.body;
       //console.log("product ---->", product);
       //await productsService.create(product);
 
       req.logger.info(`producto creado correctamente.`);
-      res.send({ resultado: "success", payload: product });
+      res.send({ resultado: "success", payload: products });
     } catch (error) {
       next(error);
     }
@@ -117,13 +123,27 @@ class ProductsController {
     }
   }
 
-  static async delete(req, res) {
+  static async delete(req, res, next) {
     const id = req.params.pid;
-    //await prodManager.deleteProduct(id);
-    await productsService.delete(id);
 
-    req.logger.info(`producto eliminado correctamente.`);
-    res.send({ resultado: "success" });
+    try {
+      const product = await productsService.getById(id);
+      if (
+        req.session.user.role == "premium" &&
+        product.owner != req.session.user.email
+      ) {
+        throw new Error(
+          `Can't delete this product because it don't belong to you.`
+        );
+      }
+      //await prodManager.deleteProduct(id);
+      const result = await productsService.delete(id);
+
+      req.logger.info(`producto eliminado correctamente.`);
+      res.send({ resultado: "success", payload: result });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

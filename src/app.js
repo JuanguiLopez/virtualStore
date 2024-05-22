@@ -25,6 +25,7 @@ const cartsRouter = require("./routes/carts.router");
 const viewsRouter = require("./routes/views.router");
 const sessionRouter = require("./routes/sessions.router");
 const loggersRouter = require("./routes/loggers.router");
+const { usersRouter: UsersRouter } = require("./routes/users.router");
 
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
 //const prodManager = new ProductManager(); // MongoDB Manager
@@ -70,6 +71,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", sessionRouter);
 app.use("/api/loggers", loggersRouter);
+app.use("/api/users", UsersRouter);
 app.use("/", viewsRouter);
 
 /** Manejo de errores para rutas no especificadas en la raíz */
