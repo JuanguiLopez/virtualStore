@@ -89,7 +89,7 @@ class ProductsController {
         });
       }
 
-      if (req.session.user.role == "premium") {
+      if (req.session.user && req.session.user.role == "premium") {
         req.body.owner = req.session.user.email;
       }
 
@@ -129,6 +129,7 @@ class ProductsController {
     try {
       const product = await productsService.getById(id);
       if (
+        req.session.user &&
         req.session.user.role == "premium" &&
         product.owner != req.session.user.email
       ) {

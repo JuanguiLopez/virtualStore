@@ -1,0 +1,215 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos disponibles en la base de datos.
+      tags: [Products]
+      responses:
+        "200":
+          description: Los productos fueron obtenidos de forma satisfactoria de la base de datos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: Error en el servidor.
+    post:
+      summary: Crea un producto en la base de datos. Acción permitida solo para usuarios con roles admin y premium.
+      tags: [Products]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createProduct"
+      responses:
+        "200":
+          description: El producto fue creado de forma satisfactoria en la base de datos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: Error en el servidor.
+  /api/products/mockingproducts:
+    get:
+      summary: Obtiene 100 productos de prueba creados con la librería Faker.
+      tags: [Products]
+      responses:
+        "200":
+          description: Los productos fueron creados de forma satisfactoria.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: Error en el servidor.
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un solo producto de los disponibles, buscándolo por el id indicado.
+      tags: [Products]
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se desea buscar
+          schema:
+            type: string
+            example: 65da6a4528e1ebcd262eb0f8
+      responses:
+        "200":
+          description: Producto obtenido de forma satisfactoria de la base de datos.
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Product"
+        "500":
+          description: Error en el servidor.
+    put:
+      summary: Actualiza los datos del producto indicado. Acción permitida solo para usuarios con roles admin y premium.
+      tags: [Products]
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se desea actualizar
+          schema:
+            type: string
+            example: 664d60168abe05a73859974a
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: El producto fue actualizado de forma satisfactoria en la base de datos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: Error en el servidor.
+    delete:
+      summary: Elimina el producto indicado de la base de datos. Acción permitida solo para usuarios con roles admin y premium.
+      tags: [Products]
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se desea eliminar
+          schema:
+            type: string
+            example: 6653c0fa04d4d5925a745fa4
+      responses:
+        "200":
+          description: El producto fue eliminado de forma satisfactoria de la base de datos.
+        "500":
+          description: Error en el servidor.
+components:
+  requestBodies:
+    createProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+          required: true
+        description:
+          type: string
+          description: Descripción del producto
+          required: true
+        code:
+          type: string
+          description: Código asociado al producto
+          required: true
+        price:
+          type: number
+          description: Precio del producto
+          required: true
+        stock:
+          type: number
+          description: Unidades disponibles del producto
+          required: true
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+          required: true
+      example:
+        title: Cámara de seguridad
+        description: Cámara de seguridad WiFi 4K
+        code: CMR444
+        price: 120
+        stock: 52
+        category: Tecnología
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+          required: true
+        description:
+          type: string
+          description: Descripción del producto
+          required: true
+        code:
+          type: string
+          description: Código asociado al producto
+          required: true
+        price:
+          type: number
+          description: Precio del producto
+          required: true
+        stock:
+          type: number
+          description: Unidades disponibles del producto
+          required: true
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+          required: true
+      example:
+        description: Audífonos con cable de 2m
+        stock: 115
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por mongo
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        code:
+          type: string
+          description: Código asociado al producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Unidades disponibles del producto
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+      example:
+        _id: ObjectId("65da6a4528e1ebcd262eb0f8")
+        title: Cámara de seguridad
+        description: Cámara de seguridad WiFi 4K
+        code: CMR444
+        price: 120
+        stock: 52
+        category: Tecnología

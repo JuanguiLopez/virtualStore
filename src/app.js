@@ -13,11 +13,31 @@ const errorHandling = require("./middlewares/errorHandling.middleware");
 const CustomError = require("./utils/errorHandling/CustomError");
 const ErrorTypes = require("./utils/errorHandling/ErrorTypes");
 const addLogger = require("./middlewares/addLogger.middleware");
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUiExpress = require("swagger-ui-express");
 
 //const ProductManager = require("../dao/fileManagers/ProductManager"); // FILE Manager
-const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
+//const ProductManager = require("./dao/dbManagers/ProductManager"); // MongoDB Manager
 const messageModel = require("./dao/models/message");
-const ProductsService = require("./services/products.service");
+//const ProductsService = require("./services/products.service");
+
+const app = express();
+
+/** Swagger documentation */
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentación Virtual Store API",
+      description:
+        "Api que permite la gestión de una tienda virtual con usuarios, carros y productos, entre otros.",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`],
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 /** routers */
 const productsRouter = require("./routes/products.router");
@@ -25,13 +45,11 @@ const cartsRouter = require("./routes/carts.router");
 const viewsRouter = require("./routes/views.router");
 const sessionRouter = require("./routes/sessions.router");
 const loggersRouter = require("./routes/loggers.router");
-const { usersRouter: UsersRouter } = require("./routes/users.router");
+const { usersRouter } = require("./routes/users.router");
 
 //const prodManager = new ProductManager(__dirname + "/files/ProductsJG.json"); // FILE Manager
 //const prodManager = new ProductManager(); // MongoDB Manager
 //const prodService = new ProductsService();
-
-const app = express();
 
 /** logger middleware */
 app.use(addLogger);
@@ -71,7 +89,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", sessionRouter);
 app.use("/api/loggers", loggersRouter);
-app.use("/api/users", UsersRouter);
+app.use("/api/users", usersRouter);
 app.use("/", viewsRouter);
 
 /** Manejo de errores para rutas no especificadas en la raíz */
