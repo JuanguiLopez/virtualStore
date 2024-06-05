@@ -59,7 +59,7 @@ class CartsService {
 
     cart.products = JSON.parse(newCartProducts);
 
-    await this.dao.updateProducts(id, cart);
+    return await this.dao.updateProducts(id, cart);
   }
 
   async deleteProduct(id, productId) {

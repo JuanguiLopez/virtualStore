@@ -18,9 +18,9 @@ const { cartsService, productsService } = require("../repositories");
 class CartsController {
   static async create(req, res) {
     //await cartManager.addCart(cart);
-    await cartsService.create();
+    const cart = await cartsService.create();
 
-    res.send({ resultado: "success" });
+    res.send({ resultado: "success", payload: cart });
   }
 
   static async getById(req, res) {
