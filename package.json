@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "set NODE_ENV=development& nodemon src/app.js -p MONGO",
     "prod": "set NODE_ENV=production& nodemon src/app.js -p MONGO",
-    "test": "mocha src/test "
+    "test": "mocha src/test"
   },
   "keywords": [],
   "author": "",

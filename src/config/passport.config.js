@@ -20,7 +20,7 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         let user;
         const { first_name, last_name, age, email } = req.body;
-
+        console.log("-------- REGISTER - BODY -------", req.body);
         //const user = await userModel.findOne({ email: username });
         user = await usersService.getByProperty("email", username); // username es el email, está así por manejo de passport
 
@@ -29,7 +29,7 @@ const initializePassport = () => {
             req.logger.warning(`user with email ${user.email} already exists.`);
             return done(null, false, { message: "user already exists." });
           }
-
+          console.log("-------- PRE CREATE CART -------");
           const cart = await cartsService.create();
           const hashedPassword = createHash(password);
 
@@ -42,10 +42,10 @@ const initializePassport = () => {
             role: "usuario",
             cart: cart._id,
           };
-
+          console.log("-------- PRE CREATE USER -------");
           //const result = await userModel.create(newUser);
           const result = await usersService.create(newUser);
-
+          console.log("-------- RESULT -------", result);
           req.logger.info(`usuario ${email} creado correctamente.`);
           return done(null, result);
         } catch (error) {

@@ -7,12 +7,29 @@ const request = supertest("http://localhost:8080");
 describe("/api/products tests", () => {
   before(async () => {
     this.productMock = {
-      title: "test product 2",
+      title: "test product 3",
       description: "Product for test only",
-      code: "TST124",
-      price: 55,
-      stock: 20,
+      code: "TST125",
+      price: 85,
+      stock: 40,
       category: "test",
+    };
+
+    this.loginUserMock = {
+      //email: "jd@email.com",
+      email: "juanguilopezh@gmail.com",
+      password: "12345",
+    };
+
+    const loginResponse = await request
+      .post("/api/sessions/login")
+      .send(this.loginUserMock);
+
+    const cookieFromHeader = loginResponse.headers["set-cookie"][0];
+    const cookieParts = cookieFromHeader.split("=");
+    this.userCookie = {
+      name: cookieParts[0],
+      value: cookieParts[1],
     };
   });
 
@@ -39,9 +56,11 @@ describe("/api/products tests", () => {
 
   // Actualmente falla por el middleware que valida el role
   it("Se debe poder crear un producto con el método POST. La primera posición del array debe tener la propiedad _id", async () => {
-    const response = await request.post(`/api/products`).send(this.productMock);
+    const response = await request
+      .post(`/api/products`)
+      .set("Cookie", `${this.userCookie.name}=${this.userCookie.value}`)
+      .send(this.productMock);
     console.log("DOCS", response._body.payload.docs);
-    console.log("DOCS[0]", response._body.payload.docs[0]);
 
     expect(response).to.have.property("status");
     expect(response.status).to.be.equal(200);

@@ -11,19 +11,21 @@ const request = supertest("http://localhost:8080");
 //   console.log("connected for tests");
 // });
 
-describe("/api/sessions tests", () => {
+describe("/api/sessions tests", function () {
+  this.timeout(5000);
   before(async () => {
     this.userMock = {
       first_name: "john",
       last_name: "doe",
       age: 33,
-      email: "jdoe5@email.com",
+      email: "jdoe333@email.com",
       password: "1234",
     };
 
     this.loginUserMock = {
-      email: "jd@email.com",
-      password: "1234",
+      //email: "jd@email.com",
+      email: "juanguilopezh@gmail.com",
+      password: "12345",
     };
 
     this.cookie;
@@ -32,13 +34,15 @@ describe("/api/sessions tests", () => {
   });
 
   it("Debe poder registrar correctamente un usuario.", async () => {
-    // const response = await request
-    //   .post("/api/sessions/register")
-    //   .send(this.userMock);
-    //console.log("_body", _body, "statusCode", statusCode);
+    const { _body, statusCode, text } = await request
+      .post("/api/sessions/register")
+      .send(this.userMock);
+    console.log("_body", _body);
+    console.log("statusCode", statusCode);
+    console.log("text", text);
     //console.log("response", response);
-    //expect(_body).to.exist;
-    //expect(statusCode).to.be.equal(200);
+    expect(_body).to.exist;
+    expect(statusCode).to.be.equal(200);
   });
 
   it("Debe loguear correctamente un usuario y retornar una cookie.", async () => {
