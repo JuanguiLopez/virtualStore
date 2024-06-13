@@ -29,7 +29,11 @@ class SessionsController {
     */
 
     //await mailingService.sendRegistrationMail(email);
-    res.send({ status: "success", message: "user registered succesfully" }); //, details: result });
+    res.send({
+      status: "success",
+      message: "user registered succesfully",
+      payload: req.session.user,
+    }); //, details: result });
   }
 
   static async registerFail(req, res) {
@@ -80,6 +84,9 @@ class SessionsController {
     }
     req.logger.debug(`sesión creada correctamente!`);
 
+    // set last_connection
+    await usersService.setLastConnection(user._id);
+
     /** service answer */
     res.status(200).send({
       status: "success",
@@ -108,6 +115,9 @@ class SessionsController {
   }
 
   static async logout(req, res) {
+    // set last_connection
+    await usersService.setLastConnection(req.session.user._id);
+
     req.session.destroy((err) => {
       if (err)
         return res

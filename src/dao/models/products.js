@@ -14,7 +14,12 @@ const productSchema = new mongoose.Schema({
     default: "adminCoder@coder.com",
   },
   thumbnails: {
-    type: [String],
+    type: [
+      {
+        name: String,
+        reference: String,
+      },
+    ],
     default: [],
   },
 });
