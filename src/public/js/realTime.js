@@ -57,7 +57,7 @@ socket.on("actualizar lista", ({ productos }) => {
         <td>${prod.price}</td>
         <td>${prod.stock}</td>
         <td>${prod.category}</td>
-        <td><button onclick="eliminarProducto('${prod._id}')">Eliminar</button></td>
+        <td><button onclick="eliminarProducto('${prod._id}')" class="btnTableEliminar">Eliminar</button></td>
       </tr>`;
   });
 });
