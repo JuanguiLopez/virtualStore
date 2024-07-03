@@ -1,0 +1,45 @@
+<main class="mainPanel">
+  <br />
+  <div class="navbar">
+    <p>Email: {{user.email}}</p>
+    <p>Rol: {{user.role}}</p>
+    <p>cart id: {{user.cart}}</p>
+  </div>
+  <br />
+  <h1>Administrador de usuarios</h1>
+
+  {{#each users}}
+    <div class="panelUsers">
+      <p>First name: {{this.first_name}}</p>
+      <p>Email: {{this.email}}</p>
+      <p>Role:
+        <select name="" id="select-{{this._id}}" class="select">
+          {{#if this.isUser}}
+            <option value="usuario" selected>Usuario</option>
+          {{else}}
+            <option value="usuario">Usuario</option>
+          {{/if}}
+
+          {{#if this.isPremium}}
+            <option value="premium" selected>Premium</option>
+          {{else}}
+            <option value="premium">Premium</option>
+          {{/if}}
+
+          {{#if this.isAdmin}}
+            <option value="admin" selected>Admin</option>
+          {{else}}
+            <option value="admin">Admin</option>
+          {{/if}}
+        </select>
+      </p>
+      <button onclick="updateUserRole('{{this._id}}')" class="btnMain">Cambiar
+        role</button>
+      <button
+        class="btnEliminar"
+        onclick="deleteUser('{{this._id}}')"
+      >Eliminar</button>
+    </div>
+  {{/each}}
+</main>
+<script src="/js/usersManager.js"></script>

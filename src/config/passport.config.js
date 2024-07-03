@@ -41,6 +41,9 @@ const initializePassport = () => {
             password: hashedPassword,
             role: "usuario",
             cart: cart._id,
+            isAdmin: false,
+            isUser: true,
+            isPremium: false,
           };
 
           //const result = await userModel.create(newUser);
@@ -71,6 +74,9 @@ const initializePassport = () => {
               first_name: "Admin",
               email: username,
               role: "admin",
+              isAdmin: true,
+              isUser: false,
+              isPremium: false,
             };
 
             req.logger.info(`admin user logged`);
@@ -127,6 +133,7 @@ const initializePassport = () => {
               email: profile._json.email,
               role: "usuario",
               cart: cart._id,
+              isAdmin: false,
             };
 
             //const result = await userModel.create(newUser);

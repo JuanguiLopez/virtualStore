@@ -1,5 +1,10 @@
 //const ProductsManager = require("../dao/dbManagers/ProductManager");
 
+const { usersService } = require("../repositories");
+const MailingService = require("./mailing.service");
+
+const mailingService = new MailingService();
+
 class ProductsService {
   constructor(dao) {
     this.dao = dao; //new ProductsManager();
@@ -54,8 +59,16 @@ class ProductsService {
 
   async delete(id) {
     const product = await this.dao.getProductById(id);
+
     if (!product) {
       return null;
+    }
+
+    if (product.owner && product.owner != "adminCoder@coder.com") {
+      await mailingService.sendDeletedPremiumProductMail(
+        product.owner,
+        product.title
+      );
     }
 
     return await this.dao.deleteProduct(id);

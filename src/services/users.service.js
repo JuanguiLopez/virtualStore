@@ -50,7 +50,7 @@ class UsersService {
 
   async setLastConnection(id) {
     const user = await this.getById(id);
-    await this.update(id, { last_connection: new Date().toLocaleString() });
+    await this.update(id, { last_connection: new Date() });
   }
 
   async addDocuments(id, files) {
@@ -134,6 +134,50 @@ class UsersService {
     user.role = user.role == "usuario" ? "premium" : "usuario";
 
     await this.update(user._id.toString(), { $set: { role: user.role } });
+  }
+
+  async deleteInactive() {
+    const users = await this.getAll();
+    const now = new Date();
+    let deletedAccounts = 0;
+
+    // Evitar usar users.forEach si dentro se van a hacer operaciones asincrónicas, usar users.every o for of
+    //Opción 1: users.every
+    // users.every(()=>{
+    //   // lógica
+    //   return true
+    // })
+
+    // Por buenas prácticas estoas constantes deberían ir al principio del archivo
+    // Acá se ajusta el tiempo para pruebas o para nuevos requerimientos
+    const INACTIVITY_MAX_TIME = 2; //60 * 24 * 2; // 2 días
+
+    //Opción 2: for of
+    for (const user of users) {
+      //if (user.last_connection) {
+      if (
+        !user.last_connection ||
+        this.getMinutesDifference(now, user.last_connection) >
+          INACTIVITY_MAX_TIME
+      ) {
+        //await this.delete(user._id);
+        await mailingService.sendDeletedAccountMail(
+          user.first_name,
+          user.email
+        );
+        deletedAccounts++;
+      }
+      //}
+    }
+
+    return deletedAccounts;
+  }
+
+  getMinutesDifference(now, last_connection) {
+    let milisecondsDif = now - last_connection;
+    let minutes = Math.round(milisecondsDif / 1000 / 60); // + /60 -> Horas | /24 -> días
+
+    return minutes;
   }
 }
 

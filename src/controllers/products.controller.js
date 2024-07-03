@@ -125,18 +125,22 @@ class ProductsController {
 
   static async delete(req, res, next) {
     const id = req.params.pid;
+    const user = req.session.user;
 
     try {
       const product = await productsService.getById(id);
+
       if (
-        req.session.user &&
-        req.session.user.role == "premium" &&
-        product.owner != req.session.user.email
+        user &&
+        user.role == "premium" &&
+        product.owner &&
+        product.owner != user.email
       ) {
         throw new Error(
           `Can't delete this product because it don't belong to you.`
         );
       }
+
       //await prodManager.deleteProduct(id);
       const result = await productsService.delete(id);
 

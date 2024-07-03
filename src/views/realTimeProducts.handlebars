@@ -1,7 +1,12 @@
-<h1 style="padding-left: 20px;">Gestionar productos</h1>
-
 <main class="main" style="padding-left: 20px;">
-
+  <br />
+  <div class="navbar">
+    <p>Email: {{user.email}}</p>
+    <p>Rol: {{user.role}}</p>
+    <p>cart id: {{user.cart}}</p>
+  </div>
+  <br />
+  <h1>Gestionar productos</h1>
   <h2>Creación de producto</h2>
   <form id="newProductForm">
     <div>
@@ -43,7 +48,7 @@
       />
     </div>
     <br /> -->
-    <button id="btnAgregar">Crear Producto</button>
+    <button id="btnAgregar" class="btnMain">Crear Producto</button>
   </form>
   <br />
 
@@ -52,36 +57,36 @@
   <table>
     <thead>
       <tr>
-        <th>id</th>
+        {{! <th>id</th> }}
         <th>Nombre</th>
         <th>Descripción</th>
         <th>Precio</th>
         <th>Stock</th>
         <th>Categoria</th>
-        <th>Acciones</th>
+        <th>Owner</th>
+        <th></th>
       </tr>
     </thead>
     <tbody id="realTimeTable">
       {{#each productos}}
         <tr>
-          <td>{{this._id}}</td>
+          {{!-- <td>{{this._id}}</td> --}}
           <td>{{this.title}}</td>
           <td>{{this.description}}</td>
           <td>${{this.price}}</td>
           <td>{{this.stock}}</td>
           <td>{{this.category}}</td>
+          <td>{{this.owner}}</td>
           <td>
-            <button onclick="eliminarProducto('{{this._id}}')">Eliminar</button>
+            <button
+              onclick="eliminarProducto('{{this._id}}')"
+              class="btnTableEliminar"
+            >Eliminar</button>
           </td>
         </tr>
       {{/each}}
     </tbody>
   </table>
-
-  <br />
-  <a href="/api/sessions/logout"><button>Salir</button></a>
-  <br />
-  <br />
 </main>
 
 <!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->

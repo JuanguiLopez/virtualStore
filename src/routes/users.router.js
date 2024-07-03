@@ -21,6 +21,9 @@ router.post(
   upload.array("product"),
   UsersController.uploadProducts
 );
+router.delete("/", checkRole(["admin"]), UsersController.deleteInactive);
+router.put("/:uid", UsersController.updateUser);
+router.delete("/:uid", UsersController.deleteUser);
 
 module.exports = {
   usersRouter: router,

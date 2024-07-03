@@ -17,6 +17,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "usuario",
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  isUser: {
+    type: Boolean,
+    default: true,
+  },
+  isPremium: {
+    type: Boolean,
+    default: false,
+  },
   documents: {
     type: [
       {
@@ -27,7 +39,7 @@ const userSchema = new mongoose.Schema({
     default: [],
   },
   last_connection: {
-    type: String,
+    type: Date,
     default: null,
   },
   profile_picture: {

@@ -1,11 +1,13 @@
+const UserDTO = require("../dao/DTOs/UserDTO");
 const { usersService } = require("../repositories");
 
 class UsersController {
   static async getAll(req, res) {
     try {
       const users = await usersService.getAll();
+      const usersDTO = users.map((user) => new UserDTO(user));
 
-      res.send({ status: "success", payload: users });
+      res.send({ status: "success", payload: usersDTO });
     } catch (error) {
       res.status(500).send({ status: "error", error: error.message });
     }
@@ -52,6 +54,41 @@ class UsersController {
       await usersService.addProducts(uid, req.files);
 
       res.send({ status: "success" });
+    } catch (error) {
+      res.status(500).send({ status: "error", error: error.message });
+    }
+  }
+
+  static async deleteInactive(req, res) {
+    try {
+      const result = await usersService.deleteInactive();
+
+      res.send({ status: "success", payload: result });
+    } catch (error) {
+      res.status(500).send({ status: "error", error: error.message });
+    }
+  }
+
+  static async updateUser(req, res) {
+    const uid = req.params.uid;
+    const { role } = req.body;
+
+    try {
+      const payload = await usersService.update(uid, { role });
+
+      res.send({ status: "success", payload: payload });
+    } catch (error) {
+      res.status(500).send({ status: "error", error: error.message });
+    }
+  }
+
+  static async deleteUser(req, res) {
+    const uid = req.params.uid;
+
+    try {
+      const payload = await usersService.delete(uid);
+
+      res.send({ status: "success", payload: payload });
     } catch (error) {
       res.status(500).send({ status: "error", error: error.message });
     }

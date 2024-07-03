@@ -1,10 +1,15 @@
 <main style="padding-left: 20px;">
-  <h2>Tu carrito de compras</h2>
+  <br />
+  <div class="navbar">
+    <p>Email: {{user.email}}</p>
+    <p>Rol: {{user.role}}</p>
+    <p>cart id: {{user.cart}}</p>
+  </div>
+  <h1>Tu carrito de compras</h1>
+  <h3>Estás un paso más cerca de obtener los productos que quieres!</h3>
 
   {{#each products}}
-    <div
-      style="border: 1px black solid;width: 500px;padding: 0px 10px 0px 10px;"
-    >
+    <div class="cartProducts">
       <h3 style="text-align: center;">{{this.product.title}}</h3>
       <p>Descripción: {{this.product.description}}</p>
       <p>Código: {{this.product.code}}</p>
@@ -16,6 +21,12 @@
     </div>
     <br />
   {{/each}}
+  <br />
+  <button
+    onclick="purchaseCart('{{user.cart}}')"
+    class="btnMain"
+  >Comprar</button>
 </main>
 <!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/cart.js"></script>

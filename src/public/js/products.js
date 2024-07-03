@@ -23,7 +23,19 @@ const purchaseCart = (cartId) => {
     method: "GET",
   }).then((res) => {
     if (res.status == 200) {
-      window.location.reload();
+      window.location.href = "/successPurchase";
+      //window.location.reload();
+    }
+  });
+};
+
+const goToCart = (cartId) => {
+  fetch(`/api/carts/${cartId}`, {
+    method: "GET",
+  }).then((res) => {
+    if (res.status == 200) {
+      window.location.href = `/carts/${cartId}`;
+      //window.location.reload();
     }
   });
 };

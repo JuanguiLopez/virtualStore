@@ -1,10 +1,45 @@
+h1,
+h2,
+h3,
+h4 {
+  font-family: sans-serif;
+}
+
 table,
+tr,
 td,
 th {
   border: 1px solid black;
+  padding: 2px 10px 2px 10px;
+  font-family: sans-serif;
 }
 table {
   border-collapse: collapse;
+}
+
+thead {
+  background-color: cadetblue;
+  color: white;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: lightblue;
+}
+
+tbody tr:nth-child(even) {
+  background-color: azure;
+}
+
+html,
+label,
+input,
+p {
+  font-family: sans-serif;
+}
+
+a {
+  font-family: sans-serif;
+  color: darkcyan;
 }
 
 #userNameTitle {
@@ -12,9 +47,229 @@ table {
   font-weight: 700;
 }
 
+.mainPanel {
+  padding-left: 20px;
+}
+
+.textFooter {
+  text-align: center;
+  font-family: sans-serif;
+  color: white;
+  margin: 5px 6px;
+}
+
+.menuNavbar {
+  color: white;
+  background-color: cadetblue;
+  width: 96%;
+  height: 5%;
+  padding: 5px 5px 5px 15px;
+  margin-left: 20px;
+  border-radius: 5px;
+}
+
+.footerNav {
+  text-align: center;
+  vertical-align: middle;
+  background-color: cadetblue;
+  width: 96%;
+  height: 5%;
+  margin: 50px 1px 30px 1px;
+  padding: 5px 5px 5px 15px;
+  float: left;
+  margin-left: 20px;
+  border-radius: 5px;
+}
+
 .navbar {
   color: white;
-  background-color: gray;
+  background-color: cadetblue;
   width: 400px;
   padding: 5px 5px 5px 15px;
+  border-radius: 5px;
+}
+
+.navbarSP {
+  color: cadetblue;
+  border: solid 1px cadetblue;
+  background-color: white;
+  text-align: center;
+  width: 50%;
+  margin: 5% 25% 1% 25%;
+  padding: 5px 5px 5px 15px;
+  border-radius: 5px;
+}
+
+.cartProducts {
+  border: 2px darkcyan solid;
+  width: 450px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+
+.loginForm {
+  border: 2px darkcyan solid;
+  width: 700px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+
+.registerForm {
+  border: 2px darkcyan solid;
+  width: 400px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+
+.sendEmailForm {
+  border: 2px darkcyan solid;
+  width: 750px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+
+.panelUsers {
+  color: cadetblue;
+  border: solid 1px cadetblue;
+  background-color: white;
+  text-align: center;
+  width: 450px;
+  margin: 2%;
+  padding: 5px 5px 5px 15px;
+  float: left;
+  border-radius: 5px;
+}
+
+.panelProducts {
+  width: 300px;
+  background: Lightcadetblue;
+  margin: 5px;
+  padding: 3px 3px 10px 20px;
+  border-radius: 5px;
+}
+
+.select {
+  background-color: white;
+  border: solid 1px cadetblue;
+  color: cadetblue;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 5px 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnTable {
+  background-color: white;
+  border: solid 1px cadetblue;
+  color: cadetblue;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 5px 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnTableEliminar {
+  background-color: darkcyan;
+  border-color: darkcyan;
+  border-style: solid;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 5px 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnEliminar {
+  background-color: darkcyan;
+  border-color: darkcyan;
+  border-style: solid;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0px 5px 0px 0px;
+  padding: 10px 30px 10px 30px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnMain {
+  background-color: white;
+  border: solid 1px darkcyan;
+  color: cadetblue;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 2px 6px;
+  padding: 10px 30px 10px 30px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnSalir {
+  float: right;
+  background-color: cadetblue;
+  border: solid 1px white;
+  color: white;
+  padding: 5px 10px;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  margin: 0px 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnChat {
+  float: right;
+  margin-right: 50px;
+  background-color: cadetblue;
+  border: solid 1px white;
+  color: white;
+  padding: 5px 10px;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnMenu {
+  background-color: cadetblue;
+  border: solid 1px white;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  font-family: sans-serif;
+  display: inline-block;
+  margin: 0px 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btnGrande {
+  width: 40%;
+  background-color: darkcyan;
+  border: solid 1px darkcyan;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  font-family: sans-serif;
+  display: inline-block;
+  margin-left: 30%;
+  cursor: pointer;
+  border-radius: 5px;
 }

@@ -70,6 +70,48 @@ class MailingService {
       console.log(error.message);
     }
   }
+
+  async sendDeletedAccountMail(userName, destinationEmail) {
+    try {
+      await transport.sendMail({
+        from: `Virtual Store <${mailing.auth.user}>`,
+        to: destinationEmail,
+        subject: `Eliminación de cuenta`,
+        html: `
+            <div>
+              <h1>hola ${userName}</h1>
+              <p>Lamentamos informarte que tu cuenta fue borrada debido al tiempo de inactividad.</p>
+              <p>En cualquier momento puedes volver a crearla y seguir disfrutando de nuestra tienda. Te esperamos!</p>
+            </div>
+        `,
+      });
+
+      console.log(`mail sent succesfully`);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async sendDeletedPremiumProductMail(destinationEmail, productTitle) {
+    try {
+      await transport.sendMail({
+        from: `Virtual Store <${mailing.auth.user}>`,
+        to: destinationEmail,
+        subject: `Eliminación de producto`,
+        html: `
+            <div>
+              <h1>PRODUCTO ELIMINADO</h1>
+              <p>Queremos informarte que tu producto "${productTitle}" fue borrado exitosamente de nuestra tienda.</p>
+              <p>En cualquier momento puedes volver a crearlo y seguir disfrutando de nuestra tienda!</p>
+            </div>
+        `,
+      });
+
+      console.log(`mail sent succesfully`);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 }
 
 module.exports = MailingService;

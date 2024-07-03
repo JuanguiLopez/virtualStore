@@ -1,5 +1,5 @@
 <main style="padding-left: 20px;">
-  <h1>Hola {{user.name}}, te damos la bienvenida a tu tienda favorita!</h1>
+  <h1>Hola {{user.name}}!</h1>
 
   <div class="navbar">
     <p>Email: {{user.email}}</p>
@@ -36,12 +36,6 @@
       {{/each}}
     </tbody>
   </table>
-
-  <br />
-  <br />
-  <a href="/api/sessions/logout">
-    <button>Salir</button>
-  </a>
 </main>
 
 <!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->

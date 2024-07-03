@@ -17,9 +17,8 @@ program.parse(process.argv);
 //console.log("---------->", options.persistence);
 
 module.exports = {
-  port: process.env.PORT,
+  port: process.env.PORT || 8080,
   mongoConnLink: process.env.MONGO_CONNECTION_LINK,
-  mongoConnLinkTest: process.env.MONGO_CONNECTION_LINK_TEST,
   sessionSecret: process.env.SESSION_SECRET,
   userAdmin: process.env.USER_ADMIN,
   passAdmin: process.env.PASS_ADMIN,

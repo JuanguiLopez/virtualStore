@@ -6,6 +6,36 @@
     <link rel="stylesheet" href="/css/index.css" />
   </head>
   <body>
+    {{! HEADER - MENÚ }}
+    {{#if user.role}}
+      <div class="menuNavbar">
+        <a href="/products"><button class="btnMenu">Home</button></a>
+        {{#if user.isAdmin}}
+          <a href="/realTimeProducts"><button class="btnMenu">Gestionar
+              Productos</button></a>
+          <a href="/usersManager"><button class="btnMenu">Gestionar Usuarios</button></a>
+        {{/if}}
+        {{#if user.isPremium}}
+          <a href="/realTimeProducts"><button class="btnMenu">Gestionar
+              Productos</button></a>
+        {{/if}}
+        <a href="/"><button class="btnMenu">Productos disponibles</button></a>
+        <a href="/api/sessions/logout"><button
+            class="btnSalir"
+          >Salir</button></a>
+        {{#if user.isUser}}
+          <a href="/chat"><button class="btnChat">Chat</button></a>
+        {{/if}}
+      </div>
+    {{/if}}
+
     {{{body}}}
+
+    {{! FOOTER }}
+    {{#if user.role}}
+      <div class="footerNav">
+        <p class="textFooter">Tienda virtual 2024 ®</p>
+      </div>
+    {{/if}}
   </body>
 </html>

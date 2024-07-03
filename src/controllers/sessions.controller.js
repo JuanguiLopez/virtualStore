@@ -57,6 +57,9 @@ class SessionsController {
         name: user.first_name,
         email: user.email,
         role: user.role,
+        isAdmin: true,
+        isUser: false,
+        isPremium: false,
       };
     } else {
       /*const user = await userModel.findOne({ email: email });
@@ -73,6 +76,10 @@ class SessionsController {
       }*/
 
       /** create user session */
+      const userIsAdmin = user.role == "admin" ? true : false;
+      const userIsUser = user.role == "usuario" ? true : false;
+      const userIsPremium = user.role == "premium" ? true : false;
+
       req.session.user = {
         id: user._id,
         name: `${user.first_name} ${user.last_name}`,
@@ -80,6 +87,9 @@ class SessionsController {
         email: user.email,
         cart: user.cart,
         role: user.role,
+        isAdmin: userIsAdmin,
+        isUser: userIsUser,
+        isPremium: userIsPremium,
       };
     }
     req.logger.debug(`sesión creada correctamente!`);

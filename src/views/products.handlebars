@@ -1,37 +1,40 @@
 <main style="padding-left: 20px;">
   <br>
+  <h1>Hola {{user.name}}, te damos la bienvenida a tu tienda favorita!</h1>
   <div class="navbar">
     <p>Email: {{user.email}}</p>
     <p>Rol: {{user.role}}</p>
     <p>cart id: {{user.cart}}</p>
   </div>
 
-  <h3>Carrito de compras</h3>
+  <h2>Tu carrito de compras</h2>
   {{#each cart.products}}
     <p>{{this.product.title}} | Cantidad: {{this.quantity}} | ${{this.product.price}} <button onclick="deleteFromCart('{{../user.cart}}','{{this.product._id}}')">Borrar</button></p>
   {{/each}}  
-  <button onclick="purchaseCart('{{user.cart}}')">Comprar</button>
+  {{!-- <button onclick="purchaseCart('{{user.cart}}')">Comprar</button> --}}
+  <button onclick="goToCart('{{user.cart}}')" class="btnMain">Ir al carrito</button>
 
   <br />
   <br />
-  <h3>Productos disponibles</h3>
+  <h3>Selecciona el producto que deseas agregar a tu carrito</h3>
 
   <table>
     <thead>
       <tr>
-        <th>id</th>
+        {{!-- <th>id</th> --}}
         <th>Nombre</th>
         <th>Descripción</th>
         <th>Precio</th>
         <th>Stock</th>
         <th>Categoria</th>
         <th>Owner</th>
+        <th></th>
       </tr>
     </thead>
     <tbody id="realTimeTable">
       {{#each productos}}
         <tr>
-          <td>{{this._id}}</td>
+          {{!-- <td>{{this._id}}</td> --}}
           <td>{{this.title}}</td>
           <td>{{this.description}}</td>
           <td>${{this.price}}</td>
@@ -39,7 +42,7 @@
           <td>{{this.category}}</td>
           <td>{{this.owner}}</td>
           <td>
-            <button onclick="addToCart('{{../user.cart}}','{{this._id}}')">Agregar al carrito</button>
+            <button onclick="addToCart('{{../user.cart}}','{{this._id}}')" class="btnTable">Agregar al carrito</button>
           </td>
         </tr>
       {{/each}}
@@ -54,12 +57,7 @@
 
   {{#if hasNextPage}}
     <a href="{{nextLink}}">Siguiente</a>
-  {{/if}}
-  
-  <br />
-    <a href="/api/sessions/logout"><button>Salir</button></a>
-  <br />
-  <br>
+  {{/if}}  
 </main>
 
 <!-- Se deben poner en este orden, primero el script de socket.io y luego nuestro script-->

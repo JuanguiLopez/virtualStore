@@ -16,7 +16,7 @@ loginForm.addEventListener("submit", (e) => {
     },
   }).then((res) => {
     if (res.status == 200) {
-      window.location.replace("/"); // <- redirección desde el front
+      window.location.replace("/products"); // <- redirección desde el front
     }
   });
 });

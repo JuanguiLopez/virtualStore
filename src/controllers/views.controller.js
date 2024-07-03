@@ -2,7 +2,11 @@
 //const ProductManager = require("../dao/dbManagers/ProductManager"); // MongoDB Manager
 //const CartsManager = require("../dao/dbManagers/CartsManager");
 //const ProductsService = require("../services/products.service");
-const { cartsService, productsService } = require("../repositories");
+const {
+  cartsService,
+  productsService,
+  usersService,
+} = require("../repositories");
 
 //const prodManager = new ProductManager(__dirname + "/../files/ProductsJG.json"); // FILE Manager
 //const prodManager = new ProductManager(); // MongoDB Manager
@@ -26,7 +30,9 @@ class viewsController {
     let products = await productsService.getAll(page, limit, sort, query);
     const productos = products.docs;
 
-    res.render("realTimeProducts", { productos });
+    const user = req.session.user;
+
+    res.render("realTimeProducts", { productos, user });
   }
 
   static async getProducts(req, res) {
@@ -58,7 +64,13 @@ class viewsController {
 
     const products = cart.products;
 
-    res.render("carts", { products });
+    const user = req.session.user;
+
+    res.render("carts", { products, user });
+  }
+
+  static async successPurchase(req, res) {
+    res.render("successPurchase", { user: req.session.user });
   }
 
   static getChat(req, res) {
@@ -79,6 +91,28 @@ class viewsController {
 
   static getSendEmailResPass(req, res) {
     res.render("sendEmailResPass", {});
+  }
+
+  static async getUsersManager(req, res) {
+    try {
+      const users = await usersService.getAll();
+
+      const usersWithRoleFlags = users.map((usr) => {
+        usr.isUser = usr.role == "usuario";
+        usr.isPremium = usr.role == "premium";
+        usr.isAdmin = usr.role == "admin";
+
+        return usr;
+      });
+
+      const user = req.session.user;
+
+      res.render("usersManager", { users: users, user });
+    } catch (error) {
+      res
+        .status(error.status || 500)
+        .send({ status: "error", error: error.message });
+    }
   }
 }
 

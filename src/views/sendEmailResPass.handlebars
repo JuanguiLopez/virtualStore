@@ -1,16 +1,20 @@
-<div style="padding-left: 20px;">
-  <h1>Ingresa tu email para cambiar tu contraseña</h1>
-  <form action="" id="sendEmailResPassForm">
-    <label for="email">Email:</label>
-    <input type="text" name="email" />
-    <p>Recuerda que una vez llegue el correo tienes un tiempo limitado para
-      cambiar la contraseña.</p>
-    <br />
-    <button type="submit">Enviar email</button>
-  </form>
+<main class="mainPanel">
   <br />
-  <p><a href="/login">volver al login</a></p>
+  <div class="sendEmailForm">
+    <div class="mainPanel">
+      <h1 style="text-align: center;">Ingresa tu email para cambiar tu
+        contraseña</h1>
+      <form action="" id="sendEmailResPassForm">
+        <label for="email">Email:</label>
+        <input type="text" name="email" />
+        <p>Recuerda que una vez llegue el correo tienes un tiempo limitado para
+          cambiar la contraseña.</p>
+        <button type="submit" class="btnMain">Enviar email</button>
+      </form>
+      <p><a href="/login">volver al login</a></p>
 
-</div>
+    </div>
+  </div>
+</main>
 
 <script src="/js/sendEmailResPass.js"></script>

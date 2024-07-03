@@ -127,7 +127,7 @@ io.on("connection", (socket) => {
 
     //const products = await prodManager.getProducts(1, 10, "asc", "");
     //const products = await prodService.getAll(1, 10, "asc", "");
-    const products = await productsService.getAll(1, 10, "asc", "");
+    const products = await productsService.getAll(1, 20, "asc", "");
     const productos = products.docs;
 
     io.emit("actualizar lista", { productos });
@@ -137,9 +137,10 @@ io.on("connection", (socket) => {
     //await prodManager.deleteProduct(id);
     //await prodService.delete(id);
     await productsService.delete(id);
+
     //const products = await prodManager.getProducts(1, 10, "asc", "");
     //const products = await prodService.getAll(1, 10, "asc", "");
-    const products = await productsService.getAll(1, 10, "asc", "");
+    const products = await productsService.getAll(1, 20, "asc", "");
     const productos = products.docs;
 
     io.emit("actualizar lista", { productos });

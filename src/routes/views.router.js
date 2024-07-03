@@ -21,6 +21,12 @@ router.get("/products", validatePrivateAccess, viewsController.getProducts);
 
 router.get("/carts/:cid", validatePrivateAccess, viewsController.getCart);
 
+router.get(
+  "/successPurchase",
+  validatePrivateAccess,
+  viewsController.successPurchase
+);
+
 /** chat */
 router.get(
   "/chat",
@@ -44,6 +50,13 @@ router.get(
   "/sendEmailResPass",
   validatePublicAccess,
   viewsController.getSendEmailResPass
+);
+
+router.get(
+  "/usersManager",
+  validatePrivateAccess,
+  checkRole(["admin"]),
+  viewsController.getUsersManager
 );
 
 module.exports = router;
